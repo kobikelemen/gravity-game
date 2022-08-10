@@ -34,10 +34,10 @@ void Projectile::render(sf::RenderWindow* window)
 }
 
 
-Projectile::Projectile(float x, float y, float r, float m) : Object(x, y, r, m)
+Projectile::Projectile(float x, float y, float vx, float vy) : Object(x, y, 5.f, 3.f)
 {
-    velx = 0;
-    vely = 0;
+    velx = vx;
+    vely = vy;
     res_forcex = 0;
     res_forcey = 0;
     accelx = 0;
@@ -65,13 +65,10 @@ void Projectile::update_pos(std::vector<std::pair<float,float>> forces)
         clock.restart();
     }
     
-    // float dx = accelx * pow(dt,2);
-    // float dy = accely * pow(dt,2);
     velx += accelx * dt;
     vely += accely * dt;
     posx += velx * dt;
     posy += vely * dt;
-    // printf("\n x,y %f %f", posx, posy);
     this->shape->setPosition(posx, posy);
 
 }

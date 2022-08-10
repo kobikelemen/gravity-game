@@ -1,3 +1,6 @@
+#ifndef OBJECT_H
+#define OBJECT_H
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <utility>
@@ -27,12 +30,12 @@ public:
 
 class Projectile : public Object
 {
-    float velx = 0;
-    float vely = 0;
+    float velx;
+    float vely;
     float res_forcex;
     float res_forcey;
-    float accelx = 0;
-    float accely = 0;
+    float accelx;
+    float accely;
     float first;
     sf::Clock clock;
 
@@ -40,7 +43,7 @@ public:
 
     void update_pos(std::vector<std::pair<float,float>> forces);
     void render(sf::RenderWindow* window);
-    Projectile(float x, float y, float r, float m);
+    Projectile(float x, float y, float vx, float vy);
 
 };
 
@@ -64,3 +67,4 @@ public:
 
 
 
+#endif

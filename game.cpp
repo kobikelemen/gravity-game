@@ -1,8 +1,10 @@
 #include "game.h"
 
-Game::Game()
+Game::Game(Player *p)
 {
-    this->window = new sf::RenderWindow(sf::VideoMode(600, 800), "SFML works!");
+    this->window = new sf::RenderWindow(sf::VideoMode(600, 800), "Gravity");
+    player = p;
+    projectiles = {};
 }
 
 
@@ -23,22 +25,51 @@ void Game::render()
         planet->render(window);
     }
 
+    player->render(window);
+
     window->display();
+}
+
+void Game::update_positions()
+{
+    std::vector<std::pair<float,float>> forces;
+    for (Projectile *proj : projectiles) 
+    {
+        for ( Planet *planet : planets ) {
+            forces.push_back(planet->calculate_force(proj));
+        }
+        proj->update_pos(forces);
+    }
+    
+}
+
+
+void Game::update_mousepos()
+{
+    // mousepos = sf::Mouse::getPosition(*this->window);
+    sf::Vector2i temp = sf::Mouse::getPosition(*window);
+    mousepos = window->mapPixelToCoords(temp);
+}
+
+
+void Game::check_click()
+{
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        update_mousepos();
+        Projectile *p = player->launch_projectile(mousepos.x, mousepos.y);
+        add_projectile(p);
+
+    }
 }
 
 
 void Game::update()
 {
     poll_events();
+    
+    check_click();
 
-    // TODO: projectile.update_pos() given forces from planet gravity
-    std::vector<std::pair<float,float>> forces;
-    for ( Planet *planet : planets ) {
-        forces.push_back(planet->calculate_force(projectiles[0]));
-    }
-    projectiles[0]->update_pos(forces);
-    // forces.push_back(std::pair<float,float>(0.009,0.09));
-
+    update_positions();
 }
 
 void Game::poll_events() // I/O -> mouse click, keyboard etc
@@ -56,13 +87,6 @@ bool Game::running()
 }
 
 
-void Game::add_projectile(Projectile *proj)
-{
-    projectiles.push_back(proj);
-}
+void Game::add_projectile(Projectile *proj) { projectiles.push_back(proj); }
 
-
-void Game::add_planet(Planet *planet)
-{
-    planets.push_back(planet);
-}
+void Game::add_planet(Planet *planet) { planets.push_back(planet); }

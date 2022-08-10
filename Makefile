@@ -6,7 +6,7 @@ CFLAGS = -g $(INCLUDES)
 
 LDFLAGS = -L/usr/local/Cellar/sfml/2.5.1_1/lib/
 
-OBJS = main.o game.o object.o
+OBJS = main.o game.o object.o player.o
 
 
 main: $(OBJS)
@@ -20,6 +20,9 @@ game.o: game.cpp
 
 object.o: object.cpp
 	$(CC) $(CFLAGS) -c object.cpp
+
+player.o: player.cpp
+	$(CC) $(CFLAGS) -c player.cpp
 
 clean:
 	rm -f $(OBJS) *~
