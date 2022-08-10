@@ -9,6 +9,7 @@ class Game
     sf::RenderWindow* window;
     sf::Event ev;
     std::vector<Projectile*> projectiles;
+    std::vector<Planet*> planets;
     
 public:
 
@@ -20,5 +21,6 @@ public:
     void poll_events();
     bool running();
     void add_projectile(Projectile *proj);
+    void add_planet(Planet *planet);
 
 };

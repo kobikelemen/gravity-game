@@ -15,10 +15,18 @@ Object::Object(float x, float y, float r, float m)
 }
 
 
-Object::~Object()
-{
-    delete shape;
-}
+Object::~Object() { delete shape; }
+
+float Object::get_mass() { return mass; }
+
+float Object::get_posx() { return posx; }
+
+float Object::get_posy() { return posy; }
+
+
+
+
+
 
 void Projectile::render(sf::RenderWindow* window)
 {
@@ -26,11 +34,10 @@ void Projectile::render(sf::RenderWindow* window)
 }
 
 
-
-
 Projectile::Projectile(float x, float y, float r, float m) : Object(x, y, r, m)
 {
-    velocity = 0;
+    velx = 0;
+    vely = 0;
     res_forcex = 0;
     res_forcey = 0;
     accelx = 0;
@@ -58,12 +65,73 @@ void Projectile::update_pos(std::vector<std::pair<float,float>> forces)
         clock.restart();
     }
     
-    float dx = accelx * pow(dt,2);
-    float dy = accely * pow(dt,2);
-    posx += dx;
-    posy += dy;
+    // float dx = accelx * pow(dt,2);
+    // float dy = accely * pow(dt,2);
+    velx += accelx * dt;
+    vely += accely * dt;
+    posx += velx * dt;
+    posy += vely * dt;
+    // printf("\n x,y %f %f", posx, posy);
     this->shape->setPosition(posx, posy);
 
 }
+
+
+
+
+
+
+
+
+Planet::Planet(float x, float y, float r, float m) : Object(x, y, r, m)
+{
+
+}
+
+
+Planet::~Planet() {};
+
+float Planet::gravity(float m1, float m2, float x1, float x2)
+{
+    float rad = x1 - x2;
+    float force;
+
+
+    if (abs(rad) > radius) {
+        force = gravity_const * m1 * m2 / pow(rad, 2);
+    } else {
+        force = gravity_const * m1 * m2 / pow(radius, 2);
+    }
+
+    if (rad > 0) {
+        return force;
+    } else { 
+        return -force; 
+    }
+    
+}
+
+
+std::pair<float,float> Planet::calculate_force(Projectile *proj)
+{
+    float fx = gravity(mass ,proj->get_mass(), posx, proj->get_posx());
+    float fy = gravity(mass ,proj->get_mass(), posy, proj->get_posy());
+    printf("\n %f   %f ", fx, fy);
+    return std::pair<float,float>( fx, fy );
+}
+
+void Planet::render(sf::RenderWindow *window)
+{
+    window->draw(*shape);
+}
+
+
+
+
+
+
+
+
+
 
 

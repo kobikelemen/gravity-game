@@ -19,6 +19,10 @@ void Game::render()
         proj->render(window);
     }
 
+    for (Planet *planet : planets) {
+        planet->render(window);
+    }
+
     window->display();
 }
 
@@ -29,10 +33,11 @@ void Game::update()
 
     // TODO: projectile.update_pos() given forces from planet gravity
     std::vector<std::pair<float,float>> forces;
-    forces.push_back(std::pair<float,float>(100000.f,100000.f));
-    for (Projectile *proj : projectiles) {
-        proj->update_pos(forces);
+    for ( Planet *planet : planets ) {
+        forces.push_back(planet->calculate_force(projectiles[0]));
     }
+    projectiles[0]->update_pos(forces);
+    // forces.push_back(std::pair<float,float>(0.009,0.09));
 
 }
 
@@ -54,4 +59,10 @@ bool Game::running()
 void Game::add_projectile(Projectile *proj)
 {
     projectiles.push_back(proj);
+}
+
+
+void Game::add_planet(Planet *planet)
+{
+    planets.push_back(planet);
 }
