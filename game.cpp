@@ -2,7 +2,7 @@
 
 Game::Game()
 {
-    this->window = new sf::RenderWindow(sf::VideoMode(200, 200), "SFML works!");
+    this->window = new sf::RenderWindow(sf::VideoMode(600, 800), "SFML works!");
 }
 
 
@@ -14,9 +14,9 @@ Game::~Game()
 
 void Game::render()
 {
-    window->clear(sf::Color(255, 0, 0 ,255));
-    for (Object *obj : objects) {
-        obj->render(window);
+    window->clear(sf::Color(10, 0, 0 ,255));
+    for (Projectile *proj : projectiles) {
+        proj->render(window);
     }
 
     window->display();
@@ -25,10 +25,18 @@ void Game::render()
 
 void Game::update()
 {
-    poll_events(); 
+    poll_events();
+
+    // TODO: projectile.update_pos() given forces from planet gravity
+    std::vector<std::pair<float,float>> forces;
+    forces.push_back(std::pair<float,float>(100000.f,100000.f));
+    for (Projectile *proj : projectiles) {
+        proj->update_pos(forces);
+    }
+
 }
 
-void Game::poll_events()
+void Game::poll_events() // I/O -> mouse click, keyboard etc
 {
     while (this->window->pollEvent(this->ev)) {
         if (ev.type == sf::Event::Closed) 
@@ -43,7 +51,7 @@ bool Game::running()
 }
 
 
-void Game::add_object(Object *obj)
+void Game::add_projectile(Projectile *proj)
 {
-    objects.push_back(obj);
+    projectiles.push_back(proj);
 }

@@ -6,8 +6,8 @@
 int main() 
 { 
     Game game;
-    Object *obj1 = new Object();
-    game.add_object(obj1);
+    Projectile *proj1 = new Projectile(30.f, 30.f, 5.f, 3.f);
+    game.add_projectile(proj1);
  
     while (game.running()) 
     { 

@@ -1,12 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <utility>
 #include "object.h"
+
 
 class Game
 {
     sf::RenderWindow* window;
     sf::Event ev;
-    std::vector<Object*> objects;
+    std::vector<Projectile*> projectiles;
     
 public:
 
@@ -17,6 +19,6 @@ public:
     void render();
     void poll_events();
     bool running();
-    void add_object(Object *obj);
+    void add_projectile(Projectile *proj);
 
 };
