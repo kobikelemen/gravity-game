@@ -3,7 +3,6 @@
 
 
 #include <SFML/Graphics.hpp>
-// #include <SFML/Mouse.hpp>
 #include <vector>
 #include <utility>
 #include "object.h"
@@ -17,6 +16,7 @@ class Game
     std::vector<Planet*> planets;
     Player *player;
     sf::Vector2f mousepos;
+    bool button_released;
     void poll_events();
     void check_click();
     void update_positions();

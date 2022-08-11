@@ -16,7 +16,7 @@ protected:
     sf::CircleShape *shape;
 
 public:
-    virtual void render(sf::RenderWindow *window) = 0; // make virtual
+    virtual void render(sf::RenderWindow *window) = 0;
     Object(float x, float y, float r, float m);
     ~Object();
     float get_mass();

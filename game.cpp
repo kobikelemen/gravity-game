@@ -2,9 +2,10 @@
 
 Game::Game(Player *p)
 {
-    this->window = new sf::RenderWindow(sf::VideoMode(600, 800), "Gravity");
+    this->window = new sf::RenderWindow(sf::VideoMode(1400, 1400), "Gravity");
     player = p;
     projectiles = {};
+    button_released = true;
 }
 
 
@@ -54,10 +55,13 @@ void Game::update_mousepos()
 
 void Game::check_click()
 {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+    if (button_released && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        
         update_mousepos();
         Projectile *p = player->launch_projectile(mousepos.x, mousepos.y);
         add_projectile(p);
+        button_released = false;
 
     }
 }
@@ -77,6 +81,10 @@ void Game::poll_events() // I/O -> mouse click, keyboard etc
     while (this->window->pollEvent(this->ev)) {
         if (ev.type == sf::Event::Closed) 
             this->window->close(); 
+        
+        if (ev.type == sf::Event::MouseButtonReleased) {
+            button_released = true;
+        }
     }
 }
 
