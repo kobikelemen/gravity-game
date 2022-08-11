@@ -88,33 +88,48 @@ Planet::Planet(float x, float y, float r, float m) : Object(x, y, r, m)
 
 Planet::~Planet() {};
 
-float Planet::gravity(float m1, float m2, float x1, float x2)
+std::pair<float,float> Planet::gravity(float m1, float m2, float x, float y)
 {
-    float rad = x1 - x2;
-    float force;
-
+    float rad = sqrt( pow(posx-x,2) + pow(posy-y,2));
+    float fy;
+    float fx;
+    float f;
 
     if (abs(rad) > radius) {
-        force = gravity_const * m1 * m2 / pow(rad, 2);
+        f = gravity_const * m1 * m2 / pow(rad, 2);
     } else {
-        force = gravity_const * m1 * m2 / pow(radius, 2);
+        f = gravity_const * m1 * m2 / pow(radius, 2);
     }
 
-    if (rad > 0) {
-        return force;
-    } else { 
-        return -force; 
+    
+
+    float theta = atan((posx-x) /(posy+y));
+    printf("\ntheta %f", theta);
+    fy = cos(theta) * f;
+    fx = sin(theta) * f;
+
+    // if (posx-x < 0) {
+    //     fx = -fx;
+    // }
+    if (posy-y < 0) {
+        fy = -fy;
     }
     
+    std::pair<float,float> forces = {fx, fy};
+    return forces;
+
+
 }
 
 
 std::pair<float,float> Planet::calculate_force(Projectile *proj)
 {
-    float fx = gravity(mass ,proj->get_mass(), posx, proj->get_posx());
-    float fy = gravity(mass ,proj->get_mass(), posy, proj->get_posy());
-    printf("\n %f   %f ", fx, fy);
-    return std::pair<float,float>( fx, fy );
+    // float fx = gravity(mass ,proj->get_mass(), posx, proj->get_posx());
+    // float fy = gravity(mass ,proj->get_mass(), posy, proj->get_posy());
+
+    std::pair<float,float> forces = gravity(mass, proj->get_mass(), proj->get_posx(), proj->get_posy());
+    // printf("\n %f   %f ", forces.first, forces.second);
+    return forces;
 }
 
 void Planet::render(sf::RenderWindow *window)

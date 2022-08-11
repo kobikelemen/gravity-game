@@ -54,7 +54,7 @@ public:
 class Planet : public Object
 {
     float gravity_const = 6.67 * 10e-11;    
-    float gravity(float m1, float m2, float x1, float x2);
+    std::pair<float,float> gravity(float m1, float m2, float x1, float x2);
 
 public:
     Planet(float x, float y, float r, float m);

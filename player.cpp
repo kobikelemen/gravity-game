@@ -22,7 +22,7 @@ void Player::render(sf::RenderWindow* window)
 Projectile* Player::launch_projectile(float mousex, float mousey)
 {
 
-    float power_const = 0.1;
+    float power_const = 0.7;
     float vx = power_const * (mousex - posx);
     float vy = power_const * (mousey - posy);
     Projectile *p = new Projectile(posx, posy, vx, vy);
