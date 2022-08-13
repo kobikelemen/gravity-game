@@ -28,7 +28,6 @@ void Game::render()
     }
 
     player->render(window);
-
     window->display();
 }
 
@@ -68,6 +67,25 @@ void Game::check_click()
 }
 
 
+
+void Game::check_collisions()
+{
+    for ( Planet * planet : planets) {
+        int i = 0;
+        for (Projectile * proj : projectiles) {
+            bool c = planet->check_collision(proj);
+            if (c) {
+                projectiles.erase(projectiles.begin()+i);
+                delete proj;
+            }
+            i ++;
+        }
+    }
+}
+
+
+
+
 void Game::update()
 {
     poll_events();
@@ -75,6 +93,9 @@ void Game::update()
     check_click();
 
     update_positions();
+
+    check_collisions();
+
 }
 
 void Game::poll_events() // I/O -> mouse click, keyboard etc

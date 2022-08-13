@@ -21,6 +21,7 @@ class Game
     void check_click();
     void update_positions();
     void update_mousepos();
+    void check_collisions();
 
 public:
 

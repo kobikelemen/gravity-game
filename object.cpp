@@ -15,7 +15,9 @@ Object::Object(float x, float y, float r, float m)
 }
 
 
-Object::~Object() { delete shape; }
+Object::~Object() {
+
+}
 
 float Object::get_mass() { return mass; }
 
@@ -34,7 +36,20 @@ void Projectile::render(sf::RenderWindow* window)
 }
 
 
-Projectile::Projectile(float x, float y, float vx, float vy) : Object(x, y, 5.f, 3.f)
+float Projectile::get_centrex()
+{
+    return posx + radius;
+}
+
+
+float Projectile::get_centrey()
+{
+    return posy + radius;
+}
+
+
+
+Projectile::Projectile(float x, float y, float vx, float vy) : Object(x, y, 5.f, 1000000000000.f)
 {
     velx = vx;
     vely = vy;
@@ -43,6 +58,12 @@ Projectile::Projectile(float x, float y, float vx, float vy) : Object(x, y, 5.f,
     accelx = 0;
     accely = 0;
     first = true;
+}
+
+
+Projectile::~Projectile()
+{
+    delete shape; 
 }
 
 void Projectile::update_pos(std::vector<std::pair<float,float>> forces)
@@ -82,11 +103,34 @@ void Projectile::update_pos(std::vector<std::pair<float,float>> forces)
 
 Planet::Planet(float x, float y, float r, float m) : Object(x, y, r, m)
 {
+    image = new sf::Image();
+    texture = new sf::Texture();
+    sprite = new sf::Sprite();
+
+    float imgx = 600.f;
+    float imgy = 600.f;
+    imgsizex = imgx * 0.8; // x0.8 because red planet is about 80% of planet.png image
+    imgsizey = imgy * 0.8; 
+    centrex =  x + 1/6 * imgx / 2 ;
+    centrey = y + 1/6 * imgy / 2;
+
+    if (!image->loadFromFile("planet.png")){
+        printf("\nPLANET IMAGE LOAD FAILED");
+    }
+    texture->loadFromImage(*image);
+    sprite->setTexture(*texture);
+    sprite->scale(sf::Vector2f(r/imgsizex, r/imgsizey));
+    sprite->setPosition(sf::Vector2f(x,y));
+
 
 }
 
 
-Planet::~Planet() {};
+Planet::~Planet() {
+    delete image;
+    delete texture;
+    delete sprite;
+}
 
 std::pair<float,float> Planet::gravity(float m1, float m2, float x, float y)
 {
@@ -110,7 +154,7 @@ std::pair<float,float> Planet::gravity(float m1, float m2, float x, float y)
 
     // if (posx-x < 0) {
     //     fx = -fx;
-    // }
+    // } 
     if (posy-y < 0) {
         fy = -fy;
     }
@@ -132,9 +176,23 @@ std::pair<float,float> Planet::calculate_force(Projectile *proj)
     return forces;
 }
 
+
+
+bool Planet::check_collision(Projectile *proj)
+{
+    if (abs(centrex - proj->get_centrex()) < radius && abs(centrey - proj->get_centrey())) {
+        return true;
+    }
+    return false;
+}
+
+
+
 void Planet::render(sf::RenderWindow *window)
 {
-    window->draw(*shape);
+    texture->loadFromImage(*image);// <-- needed if image edited
+    
+    window->draw(*sprite);
 }
 
 

@@ -11,9 +11,9 @@ class Object
 protected:
     float mass;
     float radius;
-    float posx;
-    float posy;
-    sf::CircleShape *shape;
+    float posx; // --> top left corner
+    float posy;// -->  ^
+    sf::CircleShape *shape;//
 
 public:
     virtual void render(sf::RenderWindow *window) = 0;
@@ -43,7 +43,10 @@ public:
 
     void update_pos(std::vector<std::pair<float,float>> forces);
     void render(sf::RenderWindow* window);
+    float get_centrex();
+    float get_centrey();
     Projectile(float x, float y, float vx, float vy);
+    ~Projectile();
 
 };
 
@@ -54,12 +57,21 @@ public:
 class Planet : public Object
 {
     float gravity_const = 6.67 * 10e-11;    
+    sf::Image *image;
+    sf::Texture *texture;
+    sf::Sprite *sprite;
+    float imgsizex;
+    float imgsizey;
+    float centrex;
+    float centrey;
     std::pair<float,float> gravity(float m1, float m2, float x1, float x2);
+    
 
 public:
     Planet(float x, float y, float r, float m);
     ~Planet();
     std::pair<float,float> calculate_force(Projectile *proj);
+    bool check_collision(Projectile *proj);
     void render(sf::RenderWindow *window);
 
 };
