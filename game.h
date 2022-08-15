@@ -8,6 +8,17 @@
 #include "object.h"
 #include "player.h"
 
+struct Move
+{
+    bool left;
+    bool right;
+    bool up;
+    bool space;
+    Move(bool l, bool r, bool u, bool s) : left{l}, right{r}, up{u}, space{s} {};
+    Move() : left{false}, right{false}, up{false}, space{false} {};
+};
+
+
 class Game
 {
     sf::RenderWindow* window;
@@ -19,9 +30,12 @@ class Game
     bool button_released;
     void poll_events();
     void check_click();
-    void update_positions();
+    void update_projectiles();
     void update_mousepos();
     void check_collisions();
+    void update_player();
+    
+    Move check_keyboard();
 
 public:
 

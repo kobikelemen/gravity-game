@@ -28,10 +28,11 @@ void Game::render()
     }
 
     player->render(window);
+    
     window->display();
 }
 
-void Game::update_positions()
+void Game::update_projectiles()
 {
     std::vector<std::pair<float,float>> forces;
     for (Projectile *proj : projectiles) 
@@ -59,8 +60,8 @@ void Game::check_click()
     if (button_released && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         
         update_mousepos();
-        Projectile *p = player->launch_projectile(mousepos.x, mousepos.y);
-        add_projectile(p);
+        // Projectile *p = player->launch_projectile(mousepos.x, mousepos.y);
+        // add_projectile(p);
         button_released = false;
 
     }
@@ -84,15 +85,44 @@ void Game::check_collisions()
 }
 
 
+Move Game::check_keyboard()
+{
+    Move move;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+        move.left = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+        move.right = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+        move.up = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+        move.space = true;
+    }
+    return move;
+}
+
+void Game::update_player()
+{
+    // check_click();
+    Move move = check_keyboard();
+    player->update_pos(move.up, move.left, move.right, move.space);
+
+}
+
+
 
 
 void Game::update()
 {
     poll_events();
     
-    check_click();
+    
+    update_player();
 
-    update_positions();
+    update_projectiles();
+
 
     // check_collisions();
 
