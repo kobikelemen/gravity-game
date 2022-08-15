@@ -6,13 +6,22 @@ Rocket::Rocket(float x, float y, float rotate_speed)
 {
     velx = 0;
     vely = 0;
+    mass = 100.f;
+    angle = 0;
     posx = x;
     posy = y;
     radius = 10.f;
+    this->rotate_speed = rotate_speed;
     first = true;
-    shape = new sf::CircleShape(radius);
+    shape = new sf::CircleShape(20.f);
+    shape->setPointCount(3);
+    // shape->setPoint(0, sf::Vector2f(10, 30));
+    // shape->setPoint(0, sf::Vector2f(20, 0));
+    // shape->setPoint(0, sf::Vector2f(0, 0));
+    // shape->setOutlineThickness(10);
     shape->setFillColor(sf::Color::Green);
     shape->setPosition(x,y);
+
 }
 
 
@@ -35,10 +44,10 @@ Projectile* Rocket::launch_projectile(float xi, float yi, float power_const)
 }
 
 
-void Rocket::move(float thrust, bool rotate)
+void Rocket::move(float thrust, int rotate)
 {
     
-    float accel = thrust / mass;
+    float accel = -thrust / mass;
 
     float dt;
     if (first) {
@@ -50,16 +59,23 @@ void Rocket::move(float thrust, bool rotate)
     }
 
     
-    if (rotate) {
-        float rotate_angle = rotate * dt;
-        shape->rotate(rotate_angle);    
+    if (rotate != 0) {
+        float rotate_angle = this->rotate_speed * dt;
+        if (rotate == -1) {
+            shape->rotate(-rotate_angle);  
+        } else {
+            shape->rotate(rotate_angle);  
+        }
+          
     }
     angle = shape->getRotation();
 
-    velx += dt * accel * sin(angle);
-    vely += dt * accel * cos(angle);
+    velx += dt * accel * cos(angle);
+    vely += dt * accel * sin(angle);
     posx += velx * dt;
     posy += vely * dt;
+    printf("\nangle %f", angle);
+    // printf("\nposx posy %f %f", posx,posy);
     shape->setPosition(posx, posy);
 
 
@@ -97,16 +113,20 @@ Player::~Player()
 void Player::update_pos(bool forward_arr, bool left_arr, bool right_arr, bool space)
 {
     float thrust = 0;
-    bool rotate = false;
+    int rotate = 0;
     if (forward_arr) {
-        thrust = 100;
+        thrust = 5000;
+        printf("\nthrust.");
     }
     if (left_arr) {
-        rotate = !rotate;
+        rotate = -1;
+        printf("\nleft");
     }
     if (right_arr) {
-        rotate = !rotate;
+        rotate = 1;
+        printf("\nright");
     }
+    
 
     move(thrust, rotate);
 
@@ -115,6 +135,7 @@ void Player::update_pos(bool forward_arr, bool left_arr, bool right_arr, bool sp
         float xi = sin(ang);
         float yi = cos(ang);
         float power_const = 300;
+        printf("\nspace.");
         launch_projectile(xi, yi, power_const);
     }
 

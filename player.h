@@ -15,6 +15,7 @@ class Rocket
     float radius;
     float mass;
     float first;
+    float rotate_speed;
     sf::CircleShape *shape;
     sf::Clock clock;
     // void rotate(float degrees); // clockwise is +ve
@@ -23,7 +24,7 @@ public:
     Rocket(float x, float y, float rotate_speed);
     ~Rocket();
     Projectile* launch_projectile(float xi, float yi, float power_const);
-    void move(float thrust, bool rotate);
+    void move(float thrust, int rotate);
     void render(sf::RenderWindow* window);
     float get_angle();
 

@@ -13,9 +13,9 @@ int main()
     
 
 
-    float rotate_speed = 45.f; // degs/sec
-    float player_x = 30.f;
-    float player_y = 500.f;
+    float rotate_speed = 180.f; // degs/sec
+    float player_x = 500.f;
+    float player_y = 400.f;
     Player *player = new Player(player_x, player_y, rotate_speed);
 
     
