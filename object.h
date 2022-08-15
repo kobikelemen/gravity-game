@@ -37,7 +37,9 @@ class Projectile : public Object
     float accelx;
     float accely;
     float first;
+    float explosion_radius;
     sf::Clock clock;
+    
 
 public:
 
@@ -45,7 +47,8 @@ public:
     void render(sf::RenderWindow* window);
     float get_centrex();
     float get_centrey();
-    Projectile(float x, float y, float vx, float vy);
+    float get_explosion_radius();
+    Projectile(float x, float y, float vx, float vy, float expl_rad);
     ~Projectile();
 
 };
@@ -65,6 +68,7 @@ class Planet : public Object
     float centrex;
     float centrey;
     std::pair<float,float> gravity(float m1, float m2, float x1, float x2);
+    void update_image_collision(Projectile *proj);
     
 
 public:

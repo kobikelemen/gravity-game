@@ -2,7 +2,7 @@
 
 Game::Game(Player *p)
 {
-    this->window = new sf::RenderWindow(sf::VideoMode(900, 900), "Gravity");
+    this->window = new sf::RenderWindow(sf::VideoMode(600, 600), "Gravity");
     this->window->setFramerateLimit(60);
     player = p;
     projectiles = {};
@@ -94,7 +94,7 @@ void Game::update()
 
     update_positions();
 
-    check_collisions();
+    // check_collisions();
 
 }
 

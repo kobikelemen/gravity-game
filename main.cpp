@@ -5,8 +5,8 @@
 int main() 
 { //
     
-    Planet *planet2 = new Planet(0.f, 0.f, 100.f, 100000000000000.f);
-    Player *player = new Player(350.f, 350.f);
+    Planet *planet2 = new Planet(30.f, 350.f, 100.f, 100000000000000.f);
+    Player *player = new Player(30.f, 500.f);
     
     Game game(player);
     game.add_planet(planet2);

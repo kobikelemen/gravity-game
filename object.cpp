@@ -48,8 +48,14 @@ float Projectile::get_centrey()
 }
 
 
+float Projectile::get_explosion_radius()
+{
+    return explosion_radius;
+}
 
-Projectile::Projectile(float x, float y, float vx, float vy) : Object(x, y, 5.f, 1000000000000.f)
+
+
+Projectile::Projectile(float x, float y, float vx, float vy, float expl_rad) : Object(x, y, 5.f, 1000000000000.f)
 {
     velx = vx;
     vely = vy;
@@ -57,6 +63,7 @@ Projectile::Projectile(float x, float y, float vx, float vy) : Object(x, y, 5.f,
     res_forcey = 0;
     accelx = 0;
     accely = 0;
+    explosion_radius = expl_rad;
     first = true;
 }
 
@@ -100,7 +107,6 @@ void Projectile::update_pos(std::vector<std::pair<float,float>> forces)
 
 
 
-
 Planet::Planet(float x, float y, float r, float m) : Object(x, y, r, m)
 {
     image = new sf::Image();
@@ -109,10 +115,13 @@ Planet::Planet(float x, float y, float r, float m) : Object(x, y, r, m)
 
     float imgx = 600.f;
     float imgy = 600.f;
-    imgsizex = imgx * 0.8; // x0.8 because red planet is about 80% of planet.png image
-    imgsizey = imgy * 0.8; 
-    centrex =  x + 1/6 * imgx / 2 ;
-    centrey = y + 1/6 * imgy / 2;
+    // imgsizex = imgx * 0.8; // x0.8 because red planet is about 80% of planet.png image
+    // imgsizey = imgy * 0.8; 
+    float imgsizex = imgx;
+    float imgsizey = imgy;
+
+    centrex =  x + r/imgsizex * imgx / 2 ;
+    centrey = y + r/imgsizey * imgy / 2;
 
     if (!image->loadFromFile("planet.png")){
         printf("\nPLANET IMAGE LOAD FAILED");
@@ -148,13 +157,9 @@ std::pair<float,float> Planet::gravity(float m1, float m2, float x, float y)
     
 
     float theta = atan((posx-x) /(posy+y));
-    printf("\ntheta %f", theta);
+    // printf("\ntheta  %f", theta);
     fy = cos(theta) * f;
     fx = sin(theta) * f;
-
-    // if (posx-x < 0) {
-    //     fx = -fx;
-    // } 
     if (posy-y < 0) {
         fy = -fy;
     }
@@ -178,9 +183,56 @@ std::pair<float,float> Planet::calculate_force(Projectile *proj)
 
 
 
+// TODO
+/*
+
+->WHEN COLLISION, SET PLANET PIXELS IN COLLISION RADIUS TO TRANSPARENT
+->TO DETECT COLLISION WITH NOT CIRCULAR PLANET- WHEN PROJECTILE IS WITHIN RECTANGLE PLANET
+    BOUNDING BOX, CHECK OVERLAP OF PROJECTILE WITH NON TRANSPARENT PLANET PIXELS (!= (0,0,0,0) PIXELS)
+
+*/
+
+
+void Planet::update_image_collision(Projectile *proj)
+{
+
+    float projx = proj->get_centrex();
+    float projy = proj->get_centrey();
+    float proj_relx = projx - posx;
+    float proj_rely = projy - posy;
+
+    sf::Vector2u size = image->getSize();
+
+    for (int j=0; j < size.y; j++) {
+
+        for (int i=0; i < size.x; i++) {
+            // sf::Color colour = image.getPixel(i, j);
+            float x = projx-i;
+            float y = projy-j;
+            if (sqrt( pow(x, 2) + pow(y, 2) ) < proj->get_explosion_radius()) {
+                // int tx = posx;
+                // int ty = posy;
+                // tx += i;
+                // ty += j;
+                image->setPixel(j, i, sf::Color::Blue);
+                
+
+                printf("\ni j proj_relx proj_rely posx posy projx projy %i %i %f %f %f %f %f %f", i, j, proj_relx, proj_rely,posx, posy, projx, projy);
+            }
+        }
+    }
+
+
+    
+}
+
+
+
+
 bool Planet::check_collision(Projectile *proj)
 {
-    if (abs(centrex - proj->get_centrex()) < radius && abs(centrey - proj->get_centrey())) {
+    if (sqrt(pow(abs(centrex - proj->get_centrex()), 2) + pow(abs(centrey - proj->get_centrey()), 2)) < radius) {
+        update_image_collision(proj);
         return true;
     }
     return false;

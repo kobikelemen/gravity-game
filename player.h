@@ -13,6 +13,7 @@ class Player
 
 public:
     Player(float x, float y);
+    ~Player();
     void render(sf::RenderWindow* window);
     Projectile* launch_projectile(float mousex, float mousey);
     // void update_pos()
