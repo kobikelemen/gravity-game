@@ -67,14 +67,15 @@ class Planet : public Object
     float imgsizey;
     float centrex;
     float centrey;
-    std::pair<float,float> gravity(float m1, float m2, float x1, float x2);
+    
     void update_image_collision(Projectile *proj);
     
 
 public:
     Planet(float x, float y, float r, float m);
     ~Planet();
-    std::pair<float,float> calculate_force(Projectile *proj);
+    // std::pair<float,float> calculate_force(Projectile *proj);
+    std::pair<float,float> gravity(float m2, float x1, float x2);
     bool check_collision(Projectile *proj);
     void render(sf::RenderWindow *window);
 

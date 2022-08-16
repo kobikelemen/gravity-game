@@ -1,0 +1,9 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/kobikelemen/Documents/computing/coding/c++/gravity-game'
+g++ -std=c++11 -g -I/usr/local/Cellar/sfml/2.5.1_1/include/ -c main.cpp
+g++ -std=c++11 -g -I/usr/local/Cellar/sfml/2.5.1_1/include/ -c game.cpp
+g++ -std=c++11 -g -I/usr/local/Cellar/sfml/2.5.1_1/include/ -c object.cpp
+g++ -std=c++11 -g -I/usr/local/Cellar/sfml/2.5.1_1/include/ -c player.cpp
+g++ -std=c++11 main.o game.o object.o player.o -L/usr/local/Cellar/sfml/2.5.1_1/lib/ -lsfml-graphics -lsfml-window -lsfml-system -o main
+make: Leaving directory `/Users/kobikelemen/Documents/computing/coding/c++/gravity-game'
+ 

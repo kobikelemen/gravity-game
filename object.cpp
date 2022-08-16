@@ -141,7 +141,7 @@ Planet::~Planet() {
     delete sprite;
 }
 
-std::pair<float,float> Planet::gravity(float m1, float m2, float x, float y)
+std::pair<float,float> Planet::gravity(float m2, float x, float y)
 {
     float rad = sqrt( pow(posx-x,2) + pow(posy-y,2));
     float fy;
@@ -149,9 +149,9 @@ std::pair<float,float> Planet::gravity(float m1, float m2, float x, float y)
     float f;
 
     if (abs(rad) > radius) {
-        f = gravity_const * m1 * m2 / pow(rad, 2);
+        f = gravity_const * mass * m2 / pow(rad, 2);
     } else {
-        f = gravity_const * m1 * m2 / pow(radius, 2);
+        f = gravity_const * mass * m2 / pow(radius, 2);
     }
 
     
@@ -171,26 +171,18 @@ std::pair<float,float> Planet::gravity(float m1, float m2, float x, float y)
 }
 
 
-std::pair<float,float> Planet::calculate_force(Projectile *proj)
-{
-    // float fx = gravity(mass ,proj->get_mass(), posx, proj->get_posx());
-    // float fy = gravity(mass ,proj->get_mass(), posy, proj->get_posy());
+// std::pair<float,float> Planet::calculate_force(Projectile *proj)
+// {
+//     // float fx = gravity(mass ,proj->get_mass(), posx, proj->get_posx());
+//     // float fy = gravity(mass ,proj->get_mass(), posy, proj->get_posy());
 
-    std::pair<float,float> forces = gravity(mass, proj->get_mass(), proj->get_posx(), proj->get_posy());
-    // printf("\n %f   %f ", forces.first, forces.second);
-    return forces;
-}
+//     std::pair<float,float> forces = gravity(proj->get_mass(), proj->get_posx(), proj->get_posy());
+//     // printf("\n %f   %f ", forces.first, forces.second);
+//     return forces;
+// }
 
 
 
-// TODO
-/*
-
-->WHEN COLLISION, SET PLANET PIXELS IN COLLISION RADIUS TO TRANSPARENT
-->TO DETECT COLLISION WITH NOT CIRCULAR PLANET- WHEN PROJECTILE IS WITHIN RECTANGLE PLANET
-    BOUNDING BOX, CHECK OVERLAP OF PROJECTILE WITH NON TRANSPARENT PLANET PIXELS (!= (0,0,0,0) PIXELS)
-
-*/
 
 
 void Planet::update_image_collision(Projectile *proj)
@@ -243,8 +235,8 @@ bool Planet::check_collision(Projectile *proj)
 void Planet::render(sf::RenderWindow *window)
 {
     texture->loadFromImage(*image);// <-- needed if image edited
-    
     window->draw(*sprite);
+    
 }
 
 

@@ -38,7 +38,8 @@ void Game::update_projectiles()
     for (Projectile *proj : projectiles) 
     {
         for ( Planet *planet : planets ) {
-            forces.push_back(planet->calculate_force(proj));
+            forces.push_back(planet->gravity(proj->get_mass(), proj->get_posx(), proj->get_posy()));
+            // forces.push_back(planet->calculate_force(proj));
         }
         proj->update_pos(forces);
     }
@@ -106,8 +107,18 @@ Move Game::check_keyboard()
 void Game::update_player()
 {
     // check_click();
+    std::pair<float,float> gravity_force = {0.f,0.f};
+
+    for (Planet * planet : planets) {
+        std::pair<float,float> force = planet->gravity(player->get_mass(), player->get_posx(), player->get_posy());
+        gravity_force.first += force.first;
+        gravity_force.second += force.second;
+    }
+    
+    
     Move move = check_keyboard();
-    Projectile *p = player->update_pos(move.up, move.left, move.right, move.space);
+    Projectile *p = player->update_pos(move.up, move.left, move.right, move.space, gravity_force);
+
     if (p) {
         projectiles.push_back(p);
     }
