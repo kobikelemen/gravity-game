@@ -5,8 +5,8 @@
 int main() 
 { //
     
-    float planet_x = 400.f;
-    float planet_y = 400.f;
+    float planet_x = 250.f;
+    float planet_y = 250.f;
     float planet_radius = 100.f;
     float planet_mass = 10000000000000000.f;
     Planet *planet2 = new Planet(planet_x, planet_y, planet_radius, planet_mass);

@@ -43,8 +43,6 @@ Projectile* Rocket::launch_projectile(float xi, float yi, float power_const)
 
 void Rocket::move(float thrust, std::pair<float,float> gravity_force, int rotate)
 {
-    
-    // float accel = -thrust / mass;
 
     float dt;
     if (first) {
@@ -55,7 +53,6 @@ void Rocket::move(float thrust, std::pair<float,float> gravity_force, int rotate
         clock.restart();
     }
 
-    
     if (rotate != 0) {
         float rotate_angle = this->rotate_speed * dt;
         if (rotate == -1) {
@@ -63,18 +60,15 @@ void Rocket::move(float thrust, std::pair<float,float> gravity_force, int rotate
         } else {
             shape->rotate(rotate_angle);  
         }
-          
     }
     angle = shape->getRotation();
 
-    float accelx = ( -thrust * cos(angle * PI/180) + gravity_force.first) / mass;
-    float accely = (-thrust * sin(angle * PI/180) + gravity_force.second ) / mass;
-
-
+    float accelx = ( -thrust * cos(angle * PI/180) + gravity_force.first ) / mass;
+    float accely = ( -thrust * sin(angle * PI/180) + gravity_force.second ) / mass;
     
     if (sqrt(pow(velx + dt*accelx, 2) + pow(vely + dt*accely, 2)) < 150) {
-        velx += dt * accelx;// * cos(angle * PI/180);
-        vely += dt * accely;// * sin(angle * PI/180);
+        velx += dt * accelx;
+        vely += dt * accely;
     }
     
     posx += velx * dt;

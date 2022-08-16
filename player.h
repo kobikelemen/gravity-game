@@ -45,8 +45,6 @@ class Player : public Rocket
 public:
     Player(float x, float y, float rotate_speed);
     ~Player();
-    
-    // Projectile* launch_projectile(float mousex, float mousey);
     Projectile* update_pos(bool forward_arr, bool left_arr, bool right_arr, bool space, std::pair<float,float> gravity_force);
     void set_space_released(bool s);
 };

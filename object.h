@@ -13,7 +13,7 @@ protected:
     float radius;
     float posx; // --> top left corner
     float posy;// -->  ^
-    sf::CircleShape *shape;//
+    sf::CircleShape *shape;
 
 public:
     virtual void render(sf::RenderWindow *window) = 0;
@@ -74,7 +74,6 @@ class Planet : public Object
 public:
     Planet(float x, float y, float r, float m);
     ~Planet();
-    // std::pair<float,float> calculate_force(Projectile *proj);
     std::pair<float,float> gravity(float m2, float x1, float x2);
     bool check_collision(Projectile *proj);
     void render(sf::RenderWindow *window);

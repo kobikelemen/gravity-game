@@ -39,7 +39,6 @@ void Game::update_projectiles()
     {
         for ( Planet *planet : planets ) {
             forces.push_back(planet->gravity(proj->get_mass(), proj->get_posx(), proj->get_posy()));
-            // forces.push_back(planet->calculate_force(proj));
         }
         proj->update_pos(forces);
     }
@@ -142,7 +141,7 @@ void Game::update()
 
 }
 
-void Game::poll_events() // I/O -> mouse click, keyboard etc
+void Game::poll_events()
 {
     while (this->window->pollEvent(this->ev)) {
         if (ev.type == sf::Event::Closed) 

@@ -154,14 +154,13 @@ std::pair<float,float> Planet::gravity(float m2, float x, float y)
         f = gravity_const * mass * m2 / pow(radius, 2);
     }
 
-    
-
-    float theta = atan((posx-x) /(posy+y));
-    // printf("\ntheta  %f", theta);
+    float theta = atan((posx-x) /(posy-y));
     fy = cos(theta) * f;
+
     fx = sin(theta) * f;
     if (posy-y < 0) {
         fy = -fy;
+        fx = -fx;
     }
     
     std::pair<float,float> forces = {fx, fy};
@@ -169,18 +168,6 @@ std::pair<float,float> Planet::gravity(float m2, float x, float y)
 
 
 }
-
-
-// std::pair<float,float> Planet::calculate_force(Projectile *proj)
-// {
-//     // float fx = gravity(mass ,proj->get_mass(), posx, proj->get_posx());
-//     // float fy = gravity(mass ,proj->get_mass(), posy, proj->get_posy());
-
-//     std::pair<float,float> forces = gravity(proj->get_mass(), proj->get_posx(), proj->get_posy());
-//     // printf("\n %f   %f ", forces.first, forces.second);
-//     return forces;
-// }
-
 
 
 
@@ -236,7 +223,7 @@ void Planet::render(sf::RenderWindow *window)
 {
     texture->loadFromImage(*image);// <-- needed if image edited
     window->draw(*sprite);
-    
+
 }
 
 
