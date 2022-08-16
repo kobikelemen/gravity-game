@@ -107,7 +107,10 @@ void Game::update_player()
 {
     // check_click();
     Move move = check_keyboard();
-    player->update_pos(move.up, move.left, move.right, move.space);
+    Projectile *p = player->update_pos(move.up, move.left, move.right, move.space);
+    if (p) {
+        projectiles.push_back(p);
+    }
 
 }
 
@@ -136,6 +139,11 @@ void Game::poll_events() // I/O -> mouse click, keyboard etc
         
         if (ev.type == sf::Event::MouseButtonReleased) {
             button_released = true;
+        }
+        if (ev.type == sf::Event::KeyReleased) {
+            if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+                player->set_space_released(true);
+            }
         }
     }
 }

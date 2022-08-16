@@ -14,9 +14,9 @@ class Rocket
     float vely;
     float radius;
     float mass;
-    float first;
+    bool first;
     float rotate_speed;
-    sf::CircleShape *shape;
+    sf::ConvexShape *shape;
     sf::Clock clock;
     // void rotate(float degrees); // clockwise is +ve
 
@@ -37,14 +37,15 @@ public:
 
 class Player : public Rocket
 {
-    
+    bool space_released;
 
 public:
     Player(float x, float y, float rotate_speed);
     ~Player();
     
     // Projectile* launch_projectile(float mousex, float mousey);
-    void update_pos(bool forward_arr, bool left_arr, bool right_arr, bool space);
+    Projectile* update_pos(bool forward_arr, bool left_arr, bool right_arr, bool space);
+    void set_space_released(bool s);
 };
 
 #endif

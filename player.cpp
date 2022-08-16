@@ -1,5 +1,5 @@
 #include "player.h"
-
+#define PI 3.14159265
 
 
 Rocket::Rocket(float x, float y, float rotate_speed)
@@ -13,11 +13,12 @@ Rocket::Rocket(float x, float y, float rotate_speed)
     radius = 10.f;
     this->rotate_speed = rotate_speed;
     first = true;
-    shape = new sf::CircleShape(20.f);
-    shape->setPointCount(3);
-    // shape->setPoint(0, sf::Vector2f(10, 30));
-    // shape->setPoint(0, sf::Vector2f(20, 0));
-    // shape->setPoint(0, sf::Vector2f(0, 0));
+    shape = new sf::ConvexShape(3);
+    // shape->setPointCount(3);
+
+    shape->setPoint(0, sf::Vector2f(-10, 0));
+    shape->setPoint(1, sf::Vector2f(10, -10));
+    shape->setPoint(2, sf::Vector2f(10, 10));
     // shape->setOutlineThickness(10);
     shape->setFillColor(sf::Color::Green);
     shape->setPosition(x,y);
@@ -38,6 +39,7 @@ Projectile* Rocket::launch_projectile(float xi, float yi, float power_const)
     float vx = power_const * xi;
     float vy = power_const * yi;
     float explosion_rad = 70.f;
+    printf("\nYOOOO");
     Projectile *p = new Projectile(posx, posy, vx, vy, explosion_rad);
     return p;
 
@@ -70,12 +72,17 @@ void Rocket::move(float thrust, int rotate)
     }
     angle = shape->getRotation();
 
-    velx += dt * accel * cos(angle);
-    vely += dt * accel * sin(angle);
+    
+    if (sqrt(pow(velx+dt * accel * cos(angle * PI/180),2) + pow(vely+dt * accel * sin(angle * PI/180),2)) < 150) {
+        velx += dt * accel * cos(angle * PI/180);
+        vely += dt * accel * sin(angle * PI/180);
+    }
+    
     posx += velx * dt;
     posy += vely * dt;
-    printf("\nangle %f", angle);
-    // printf("\nposx posy %f %f", posx,posy);
+    // printf("\nangle %f", angle);
+    printf("\nvel %f ", sqrt(pow(velx,2) + pow(vely,2)));
+    // printf("\n cos sin  %f %f", cos(angle * PI/180), sin(angle * PI/180));
     shape->setPosition(posx, posy);
 
 
@@ -100,7 +107,7 @@ float Rocket::get_angle()
 
 Player::Player(float x, float y, float rotate_speed) : Rocket(x,y, rotate_speed)
 {
-    
+    space_released = true;
 }
 
 Player::~Player()
@@ -110,33 +117,42 @@ Player::~Player()
 
 
 
-void Player::update_pos(bool forward_arr, bool left_arr, bool right_arr, bool space)
+Projectile* Player::update_pos(bool forward_arr, bool left_arr, bool right_arr, bool space)
 {
     float thrust = 0;
     int rotate = 0;
     if (forward_arr) {
-        thrust = 5000;
-        printf("\nthrust.");
+        thrust = 50000;
+        // printf("\nthrust.");
     }
     if (left_arr) {
         rotate = -1;
-        printf("\nleft");
+        // printf("\nleft");
     }
     if (right_arr) {
         rotate = 1;
-        printf("\nright");
+        // printf("\nright");
     }
     
 
     move(thrust, rotate);
 
-    if (space) {
+    if (space_released && space) {
+        space_released = false;
         float ang = get_angle();
-        float xi = sin(ang);
-        float yi = cos(ang);
-        float power_const = 300;
-        printf("\nspace.");
-        launch_projectile(xi, yi, power_const);
+        float xi = cos(ang * PI/180);
+        float yi = sin(ang * PI/180);
+        float power_const = -300;
+        printf("\nspace angle %f", ang);
+        Projectile *p = launch_projectile(xi, yi, power_const);
+        return p;
     }
+    return NULL;
 
+}
+
+
+void Player::set_space_released(bool s)
+{
+    space_released = s;
 }
