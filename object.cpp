@@ -49,6 +49,11 @@ float Projectile::get_explosion_radius()
     return explosion_radius;
 }
 
+float Projectile::get_damage()
+{
+    return damage;
+}
+
 
 
 Projectile::Projectile(float x, float y, float vx, float vy, float expl_rad) : Object(x, y, 1000000000000.f)
@@ -61,6 +66,7 @@ Projectile::Projectile(float x, float y, float vx, float vy, float expl_rad) : O
     accelx = 0;
     accely = 0;
     explosion_radius = expl_rad;
+    damage = 10.f;
     first = true;
     this->shape = new sf::CircleShape(radius);
     this->shape->setFillColor(sf::Color::Green);
@@ -113,6 +119,7 @@ Planet::Planet(float x, float y, float r, float m) : Object(x, y, m)
     texture = new sf::Texture();
     sprite = new sf::Sprite();
     radius = 0.5 * r;
+    health = 100.f;
 
     float imgx = 600.f;
     float imgy = 600.f;
@@ -202,12 +209,23 @@ void Planet::update_image_collision(Projectile *proj)
             }
         }
     }
-
-
-    
 }
 
 
+void Planet::on_collision(Projectile *proj)
+{
+    health -= proj->get_damage();
+    if (health > 33.3 && health < 66.6) {
+        if (!image->loadFromFile("planet_cracked1.png")){
+            printf("\nPLANET IMAGE LOAD FAILED");
+        }
+
+    } else if (health < 33.3) {
+        if (!image->loadFromFile("planet_cracked2.png")){
+            printf("\nPLANET IMAGE LOAD FAILED");
+        }
+    }
+}
 
 
 bool Planet::check_collision(Projectile *proj)
@@ -215,6 +233,7 @@ bool Planet::check_collision(Projectile *proj)
     printf("\nplanet centre %f %f", centrex, centrey);
     if (sqrt(pow(abs(centrex - proj->get_centrex()), 2) + pow(abs(centrey - proj->get_centrey()), 2)) < radius) {
         // update_image_collision(proj);
+        on_collision(proj);
         return true;
     }
     return false;
@@ -226,8 +245,10 @@ void Planet::render(sf::RenderWindow *window)
 {
     texture->loadFromImage(*image);// <-- needed if image edited
     window->draw(*sprite);
-
 }
+
+
+
 
 
 

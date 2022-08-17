@@ -4,12 +4,20 @@
 
 int main() 
 { //
-    
-    float planet_x = 250.f;
-    float planet_y = 250.f;
+
+
+    float planet_x = 150.f;
+    float planet_y = 150.f;
     float planet_radius = 100.f;
     float planet_mass = 10000000000000000.f;
-    Planet *planet2 = new Planet(planet_x, planet_y, planet_radius, planet_mass);
+    Planet *planet1 = new Planet(planet_x, planet_y, planet_radius, planet_mass);
+
+    
+    float planet2_x = 400.f;
+    float planet2_y = 400.f;
+    float planet2_radius = 100.f;
+    float planet2_mass = 10000000000000000.f;
+    Planet *planet2 = new Planet(planet2_x, planet2_y, planet2_radius, planet2_mass);
     
 
 
@@ -29,6 +37,7 @@ int main()
     Game game(player);
     game.set_player2(player2);
     game.add_planet(planet2);
+    game.add_planet(planet1);
     
     while (game.running()) 
     { 

@@ -38,6 +38,7 @@ class Projectile : public Object
     float first;
     float radius;
     float explosion_radius;
+    float damage;
     sf::Clock clock;
     sf::CircleShape *shape;
     
@@ -48,6 +49,7 @@ public:
     void render(sf::RenderWindow* window);
     float get_centrex();
     float get_centrey();
+    float get_damage();
     float get_explosion_radius();
     Projectile(float x, float y, float vx, float vy, float expl_rad);
     ~Projectile();
@@ -72,6 +74,7 @@ class Planet : public Object
     float radius;
     float health;
     void update_image_collision(Projectile *proj);
+    void on_collision(Projectile *proj);
     
 
 public:
