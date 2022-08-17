@@ -11,14 +11,12 @@ class Object
 {
 protected:
     float mass;
-    float radius;
     float posx; // --> top left corner
     float posy;// -->  ^
-    sf::CircleShape *shape;
 
 public:
     virtual void render(sf::RenderWindow *window) = 0;
-    Object(float x, float y, float r, float m);
+    Object(float x, float y, float m);
     ~Object();
     float get_mass();
     float get_posx();
@@ -38,8 +36,10 @@ class Projectile : public Object
     float accelx;
     float accely;
     float first;
+    float radius;
     float explosion_radius;
     sf::Clock clock;
+    sf::CircleShape *shape;
     
 
 public:
@@ -64,11 +64,13 @@ class Planet : public Object
     sf::Image *image;
     sf::Texture *texture;
     sf::Sprite *sprite;
+    sf::CircleShape *shape;
     float imgsizex;
     float imgsizey;
     float centrex;
     float centrey;
-    
+    float radius;
+    float health;
     void update_image_collision(Projectile *proj);
     
 

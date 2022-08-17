@@ -5,15 +5,11 @@
 #include <SFML/Graphics.hpp>
 
 
-class Rocket
+class Rocket : public Object
 {
     float angle; // degrees
-    float posx;
-    float posy;
     float velx;
     float vely;
-    float radius;
-    float mass;
     bool first;
     bool alive;
     float rotate_speed;
@@ -31,9 +27,6 @@ public:
     void move(float thrust, std::pair<float,float> gravity_force, int rotate);
     void render(sf::RenderWindow* window);
     float get_angle();
-    float get_mass();
-    float get_posx();
-    float get_posy();
     bool is_alive();
 
 };

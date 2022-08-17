@@ -45,7 +45,6 @@ void Game::update_projectiles()
         }
         proj->update_pos(forces);
     }
-    
 }
 
 
@@ -144,7 +143,7 @@ void Game::update()
 
     update_player2();
 
-    // check_collisions();
+    check_collisions();
 
 }
 

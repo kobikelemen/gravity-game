@@ -2,15 +2,11 @@
 #define PI 3.14159265
 
 
-Rocket::Rocket(float x, float y, float rotate_speed)
+Rocket::Rocket(float x, float y, float rotate_speed) : Object(x,y,100.f)
 {
     velx = 0;
     vely = 0;
-    mass = 100.f;
     angle = 0;
-    posx = x;
-    posy = y;
-    radius = 10.f;
     this->rotate_speed = rotate_speed;
     first = true;
     alive = true;
@@ -128,21 +124,6 @@ float Rocket::get_angle()
     return angle;
 }
 
-
-float Rocket::get_mass()
-{
-    return mass;
-}
-
-float Rocket::get_posx()
-{
-    return posx;
-}
-
-float Rocket::get_posy()
-{
-    return posy;
-}
 
 bool Rocket::is_alive()
 {
