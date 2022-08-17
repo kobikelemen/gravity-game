@@ -26,6 +26,7 @@ class Game
     std::vector<Projectile*> projectiles;
     std::vector<Planet*> planets;
     Player *player;
+    Player *player2;
     sf::Vector2f mousepos;
     bool button_released;
     void poll_events();
@@ -33,7 +34,8 @@ class Game
     void update_projectiles();
     void update_mousepos();
     void check_collisions();
-    void update_player();
+    void update_player1();
+    void update_player2();
     
     Move check_keyboard();
 
@@ -47,6 +49,8 @@ public:
     bool running();
     void add_projectile(Projectile *proj);
     void add_planet(Planet *planet);
+    void set_player2(Player *p2);
+    // bool is_player2_alive();
 
 };
 

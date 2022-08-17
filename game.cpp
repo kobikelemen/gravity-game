@@ -28,6 +28,9 @@ void Game::render()
     }
 
     player->render(window);
+    if (player2->is_alive()) {
+        player2->render(window);
+    }
     
     window->display();
 }
@@ -103,7 +106,7 @@ Move Game::check_keyboard()
     return move;
 }
 
-void Game::update_player()
+void Game::update_player1()
 {
     // check_click();
     std::pair<float,float> gravity_force = {0.f,0.f};
@@ -113,8 +116,6 @@ void Game::update_player()
         gravity_force.first += force.first;
         gravity_force.second += force.second;
     }
-    
-    
     Move move = check_keyboard();
     Projectile *p = player->update_pos(move.up, move.left, move.right, move.space, gravity_force);
 
@@ -125,17 +126,23 @@ void Game::update_player()
 }
 
 
-
+void Game::update_player2()
+{
+    if (player2->is_alive()) {
+        player2->check_collision(&projectiles);
+    }
+}
 
 void Game::update()
 {
     poll_events();
     
     
-    update_player();
+    update_player1();
 
     update_projectiles();
 
+    update_player2();
 
     // check_collisions();
 
@@ -168,3 +175,8 @@ bool Game::running()
 void Game::add_projectile(Projectile *proj) { projectiles.push_back(proj); }
 
 void Game::add_planet(Planet *planet) { planets.push_back(planet); }
+
+void Game::set_player2(Player *p2)
+{
+    player2 = p2;
+}

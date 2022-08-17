@@ -13,6 +13,7 @@ Rocket::Rocket(float x, float y, float rotate_speed)
     radius = 10.f;
     this->rotate_speed = rotate_speed;
     first = true;
+    alive = true;
     shape = new sf::ConvexShape(3);
     shape->setPoint(0, sf::Vector2f(-10, 0));
     shape->setPoint(1, sf::Vector2f(10, -10));
@@ -39,6 +40,43 @@ Projectile* Rocket::launch_projectile(float xi, float yi, float power_const)
     return p;
 
 }
+
+float Rocket::sign(sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f p3)
+{
+    return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+}
+
+bool Rocket::in_triangle(sf::Vector2f pt, sf::Vector2f v1, sf::Vector2f v2, sf::Vector2f v3)
+{
+    float d1 = sign(pt, v1, v2);
+    float d2 = sign(pt, v2, v3);
+    float d3 = sign(pt, v3, v1);
+    bool has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+    bool has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+    return !(has_neg && has_pos);
+}
+
+
+bool Rocket::check_collision(std::vector<Projectile*> *projectiles)
+{
+
+    int i = 0;
+
+    for (Projectile *projectile : *projectiles) {
+        if (projectile->get_centrex() < posx+20.f && projectile->get_centrex() > posx-20.f && projectile->get_centrey() < posy+20.f && projectile->get_centrey() > posy-20.f){
+        // if ( in_triangle( sf::Vector2f(projectile->get_centrex(), projectile->get_centrey()), shape->getPoint(0), shape->getPoint(1), shape->getPoint(2)) ) {
+            delete projectile;
+            projectiles->erase(projectiles->begin() + i);            
+            alive = false;
+            return true;
+        }
+        i++;
+    }
+    return false;
+}
+
+
+
 
 
 void Rocket::move(float thrust, std::pair<float,float> gravity_force, int rotate)
@@ -105,6 +143,12 @@ float Rocket::get_posy()
 {
     return posy;
 }
+
+bool Rocket::is_alive()
+{
+    return alive;
+}
+
 
 
 Player::Player(float x, float y, float rotate_speed) : Rocket(x,y, rotate_speed)

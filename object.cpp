@@ -148,7 +148,7 @@ std::pair<float,float> Planet::gravity(float m2, float x, float y)
     float fx;
     float f;
 
-    if (abs(rad) > radius) {
+    if (rad > radius) {
         f = gravity_const * mass * m2 / pow(rad, 2);
     } else {
         f = gravity_const * mass * m2 / pow(radius, 2);
