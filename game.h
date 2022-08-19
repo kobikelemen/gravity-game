@@ -25,6 +25,7 @@ class Game
 {
     sf::RenderWindow* window;
     sf::Event ev;
+    sf::View *view;
     sf::Texture *stars_texture;
     sf::Sprite *stars_sprite;
     std::vector<Projectile*> projectiles;
@@ -33,6 +34,7 @@ class Game
     Player *player;
     Player *player2;
     sf::Vector2f mousepos;
+    sf::Vector2f screen_dim;
     bool button_released;
     void poll_events();
     void check_click();
@@ -46,7 +48,7 @@ class Game
 
 public:
 
-    Game(Player *p);
+    Game(Player *p, sf::Vector2f screen_dimensions);
     ~Game();
 
     void update();

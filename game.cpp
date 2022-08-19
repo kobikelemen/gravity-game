@@ -1,8 +1,8 @@
 #include "game.h"
 
-Game::Game(Player *p)
+Game::Game(Player *p, sf::Vector2f screen_dimensions)
 {
-    this->window = new sf::RenderWindow(sf::VideoMode(600, 600), "Gravity");
+    this->window = new sf::RenderWindow(sf::VideoMode(screen_dimensions.x, screen_dimensions.y), "Gravity");
     this->window->setFramerateLimit(60);
     player = p;
     projectiles = {};
@@ -10,8 +10,8 @@ Game::Game(Player *p)
     stars_texture = new sf::Texture();
     stars_texture->loadFromFile("stars.jpeg");
     stars_sprite = new sf::Sprite(*stars_texture);
-
-
+    view = new sf::View();
+    screen_dim = screen_dimensions;
 }
 
 
@@ -24,6 +24,7 @@ Game::~Game()
 void Game::render()
 {
     window->clear(sf::Color(10, 0, 0 ,255));
+    window->setView(*view);
 
     window->draw(*stars_sprite);
 
@@ -179,6 +180,16 @@ void Game::update()
     update_player2();
 
     check_collisions();
+
+
+    float x = player->get_posx() - screen_dim.x/2;//
+    float y = player->get_posy() - screen_dim.y/2;
+
+    view->reset(sf::FloatRect(x, y, screen_dim.x, screen_dim.y));
+    stars_sprite->setPosition(x,y);
+
+
+
 
     
 

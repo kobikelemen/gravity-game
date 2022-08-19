@@ -40,8 +40,8 @@ int main()
     Moon * moon = new Moon(moon_vx, moon_vy, moon_radius, moon_mass, planet2);
 
 
-    
-    Game game(player);
+    sf::Vector2f screen_dimensions = {600.f, 600.f};
+    Game game(player, screen_dimensions);
     game.set_player2(player2);
     game.add_planet(planet2);
     // game.add_planet(planet1);
