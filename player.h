@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "object.h"
+#include "gravity_objects.h"
 #include <SFML/Graphics.hpp>
 
 

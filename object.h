@@ -21,69 +21,9 @@ public:
     float get_mass();
     float get_posx();
     float get_posy();
+    void set_posx(float x);
+    void set_posy(float y);
     
-};
-
-
-
-
-class Projectile : public Object
-{
-    float velx;
-    float vely;
-    float res_forcex;
-    float res_forcey;
-    float accelx;
-    float accely;
-    float first;
-    float radius;
-    float explosion_radius;
-    float damage;
-    sf::Clock clock;
-    sf::CircleShape *shape;
-    
-
-public:
-
-    void update_pos(std::vector<std::pair<float,float>> forces);
-    void render(sf::RenderWindow* window);
-    float get_centrex();
-    float get_centrey();
-    float get_damage();
-    float get_explosion_radius();
-    Projectile(float x, float y, float vx, float vy, float expl_rad);
-    ~Projectile();
-
-};
-
-
-
-
-
-class Planet : public Object
-{
-    float gravity_const = 6.67 * 10e-11;    
-    sf::Image *image;
-    sf::Texture *texture;
-    sf::Sprite *sprite;
-    sf::CircleShape *shape;
-    float imgsizex;
-    float imgsizey;
-    float centrex;
-    float centrey;
-    float radius;
-    float health;
-    void update_image_collision(Projectile *proj);
-    void on_collision(Projectile *proj);
-    
-
-public:
-    Planet(float x, float y, float r, float m);
-    ~Planet();
-    std::pair<float,float> gravity(float m2, float x1, float x2);
-    bool check_collision(Projectile *proj);
-    void render(sf::RenderWindow *window);
-
 };
 
 

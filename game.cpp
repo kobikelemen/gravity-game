@@ -7,6 +7,11 @@ Game::Game(Player *p)
     player = p;
     projectiles = {};
     button_released = true;
+    stars_texture = new sf::Texture();
+    stars_texture->loadFromFile("stars.jpeg");
+    stars_sprite = new sf::Sprite(*stars_texture);
+
+
 }
 
 
@@ -19,12 +24,19 @@ Game::~Game()
 void Game::render()
 {
     window->clear(sf::Color(10, 0, 0 ,255));
+
+    window->draw(*stars_sprite);
+
     for (Projectile *proj : projectiles) {
         proj->render(window);
     }
 
     for (Planet *planet : planets) {
         planet->render(window);
+    }
+
+    for (Moon *moon : moons) {
+        moon->render(window);
     }
 
     player->render(window);
@@ -35,17 +47,38 @@ void Game::render()
     window->display();
 }
 
-void Game::update_projectiles()
+void Game::update_gravity_objects()
 {
-    std::vector<std::pair<float,float>> forces;
-    for (Projectile *proj : projectiles) 
-    {
-        for ( Planet *planet : planets ) {
-            forces.push_back(planet->gravity(proj->get_mass(), proj->get_posx(), proj->get_posy()));
+    std::vector<std::pair<float,float>> proj_forces;
+    std::vector<std::pair<float,float>> moon_forces;
+
+    for ( Projectile *proj : projectiles ) {
+
+        // for (Moon *moon : moons) {
+        //     moon_forces.push_back(planet->gravity(moon->get_mass(), moon->get_posx(), moon->get_posy()));
+        // }
+
+        for (Planet *planet : planets) {
+            proj_forces.push_back(planet->gravity(proj->get_mass(), proj->get_posx(), proj->get_posy()));
         }
-        proj->update_pos(forces);
+        proj->update_pos(proj_forces);
+        
     }
+
+    for (Moon *moon : moons) {
+
+        for (Planet *planet : planets) {
+            moon_forces.push_back(planet->gravity(moon->get_mass(), moon->get_posx(), moon->get_posy()));
+        }
+        moon->update_pos(moon_forces);
+    }
+
+
 }
+
+
+
+
 
 
 void Game::update_mousepos()
@@ -139,11 +172,15 @@ void Game::update()
     
     update_player1();
 
-    update_projectiles();
+    // update_moons();
+
+    update_gravity_objects();
 
     update_player2();
 
     check_collisions();
+
+    
 
 }
 
@@ -178,4 +215,9 @@ void Game::add_planet(Planet *planet) { planets.push_back(planet); }
 void Game::set_player2(Player *p2)
 {
     player2 = p2;
+}
+
+void Game::add_moon(Moon *m)
+{
+    moons.push_back(m);
 }
