@@ -15,7 +15,7 @@ class GravityObject : public Object
     float accely;
     float first;
     float radius;
-    sf::Clock clock;    
+    sf::Clock clock;   
 
 public:
 

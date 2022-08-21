@@ -40,6 +40,10 @@ void Game::render()
         moon->render(window);
     }
 
+    for (Laser *laser : lasers) {
+        laser->render(window);
+    }
+
     player->render(window);
     if (player2->is_alive()) {
         player2->render(window);
@@ -110,10 +114,20 @@ void Game::check_collisions()
     for ( Planet * planet : planets) {
         int i = 0;
         for (Projectile * proj : projectiles) {
-            bool c = planet->check_collision(proj);
+            bool c = planet->check_collision_projectile(proj);
             if (c) {
+
                 projectiles.erase(projectiles.begin()+i);
                 delete proj;
+            }
+            i ++;
+        }
+        i = 0;
+        for (Laser * laser : lasers) {
+            bool c = planet->check_collision_laser(laser);
+            if (c) {
+                lasers.erase(lasers.begin()+i);
+                delete laser;
             }
             i ++;
         }
@@ -136,6 +150,9 @@ Move Game::check_keyboard()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
         move.space = true;
     }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        move.a = true;
+    }
     return move;
 }
 
@@ -149,11 +166,17 @@ void Game::update_player1()
         gravity_force.first += force.first;
         gravity_force.second += force.second;
     }
-    Move move = check_keyboard();
-    Projectile *p = player->update_pos(move.up, move.left, move.right, move.space, gravity_force);
 
-    if (p) {
-        projectiles.push_back(p);
+    
+
+    Move move = check_keyboard();
+    launched launch = player->update_pos(move.up, move.left, move.right, move.space, move.a, gravity_force);
+
+    if (launch.p) {
+        projectiles.push_back(launch.p);
+    }
+    if (launch.l) {
+        lasers.push_back(launch.l);
     }
 
 }
@@ -162,33 +185,59 @@ void Game::update_player1()
 void Game::update_player2()
 {
     if (player2->is_alive()) {
-        player2->check_collision(&projectiles);
+        
+        std::vector<std::pair<float,float>> proj_positions;
+        for (Projectile *proj : projectiles) {
+            proj_positions.push_back(std::pair<float,float>(proj->get_centrex(), proj->get_centrey()));
+        }
+
+        player2->check_collision(proj_positions);
+        p2_deadtimer.restart();
+    } else if (p2_deadtimer.getElapsedTime().asSeconds() > 3) {
+        player2->set_alive(true);
+        player2->set_posx(planets[1]->get_centrex()+planets[1]->get_radius()+50.f);
+        player2->set_posy(planets[1]->get_centrey());
     }
 }
+
+
+void Game::update_screen_pos()
+{
+    float x = player->get_posx() - screen_dim.x/2;
+    float y = player->get_posy() - screen_dim.y/2;
+
+    view->reset(sf::FloatRect(x, y, screen_dim.x, screen_dim.y));
+    stars_sprite->setPosition(x,y);
+}
+
+
+
+void Game::update_lasers()
+{
+    for (Laser *laser : lasers) {
+        laser->update_pos();
+    }
+}
+
+
 
 void Game::update()
 {
     poll_events();
+        
     
-    
-    update_player1();
-
-    // update_moons();
 
     update_gravity_objects();
+
+    update_lasers();
+
+    update_player1();
 
     update_player2();
 
     check_collisions();
 
-
-    float x = player->get_posx() - screen_dim.x/2;//
-    float y = player->get_posy() - screen_dim.y/2;
-
-    view->reset(sf::FloatRect(x, y, screen_dim.x, screen_dim.y));
-    stars_sprite->setPosition(x,y);
-
-
+    update_screen_pos();
 
 
     

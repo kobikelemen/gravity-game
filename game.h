@@ -16,6 +16,7 @@ struct Move
     bool right;
     bool up;
     bool space;
+    bool a;
     Move(bool l, bool r, bool u, bool s) : left{l}, right{r}, up{u}, space{s} {};
     Move() : left{false}, right{false}, up{false}, space{false} {};
 };
@@ -31,8 +32,10 @@ class Game
     std::vector<Projectile*> projectiles;
     std::vector<Planet*> planets;
     std::vector<Moon*> moons;
+    std::vector<Laser*> lasers;
     Player *player;
     Player *player2;
+    sf::Clock p2_deadtimer;
     sf::Vector2f mousepos;
     sf::Vector2f screen_dim;
     bool button_released;
@@ -43,6 +46,8 @@ class Game
     void check_collisions();
     void update_player1();
     void update_player2();
+    void update_screen_pos();
+    void update_lasers();
     
     Move check_keyboard();
 

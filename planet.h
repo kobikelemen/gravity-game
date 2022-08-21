@@ -4,6 +4,8 @@
 
 #include "object.h"
 #include "gravity_objects.h"
+#include "laser.h"
+
 
 class Projectile;
 
@@ -29,10 +31,12 @@ public:
     Planet(float x, float y, float r, float m);
     ~Planet();
     std::pair<float,float> gravity(float m2, float x1, float x2);
-    bool check_collision(Projectile *proj);
+    bool check_collision_projectile(Projectile *proj);
+    bool check_collision_laser(Laser *laser);
     void render(sf::RenderWindow *window);
     float get_centrex();
     float get_centrey();
+    float get_radius();
 
 };
 

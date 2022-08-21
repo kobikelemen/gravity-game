@@ -38,6 +38,14 @@ Projectile* Rocket::launch_projectile(float xi, float yi, float power_const)
 
 }
 
+
+Laser* Rocket::launch_laser(float xi, float yi)
+{
+    Laser *l = new Laser(posx, posy, xi, yi);
+    return l;
+}
+
+
 float Rocket::sign(sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f p3)
 {
     return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
@@ -54,22 +62,23 @@ bool Rocket::in_triangle(sf::Vector2f pt, sf::Vector2f v1, sf::Vector2f v2, sf::
 }
 
 
-bool Rocket::check_collision(std::vector<Projectile*> *projectiles)
+// bool Rocket::check_collision(std::vector<Projectile*> *projectiles)
+int Rocket::check_collision(std::vector<std::pair<float,float>> positions)
 {
 
     int i = 0;
 
-    for (Projectile *projectile : *projectiles) {
-        if (projectile->get_centrex() < posx+20.f && projectile->get_centrex() > posx-20.f && projectile->get_centrey() < posy+20.f && projectile->get_centrey() > posy-20.f){
+    for (std::pair<float,float> pos : positions) {
+        if (pos.first < posx+20.f && pos.first > posx-20.f && pos.second < posy+20.f && pos.second > posy-20.f){
         // if ( in_triangle( sf::Vector2f(projectile->get_centrex(), projectile->get_centrey()), shape->getPoint(0), shape->getPoint(1), shape->getPoint(2)) ) {
-            delete projectile;
-            projectiles->erase(projectiles->begin() + i);            
+            // delete projectile;
+            // projectiles->erase(projectiles->begin() + i);            
             alive = false;
-            return true;
+            return i;
         }
         i++;
     }
-    return false;
+    return -1;
 }
 
 
@@ -113,29 +122,33 @@ void Rocket::move(float thrust, std::pair<float,float> gravity_force, int rotate
 
 }
 
-
 void Rocket::render(sf::RenderWindow* window)
 {
     window->draw(*shape);
 }
-
 
 float Rocket::get_angle()
 {
     return angle;
 }
 
-
 bool Rocket::is_alive()
 {
     return alive;
 }
+
+void Rocket::set_alive(float a)
+{
+    alive = a;
+}
+
 
 
 
 Player::Player(float x, float y, float rotate_speed) : Rocket(x,y, rotate_speed)
 {
     space_released = true;
+    a_released = true;
 }
 
 Player::~Player()
@@ -145,7 +158,7 @@ Player::~Player()
 
 
 
-Projectile* Player::update_pos(bool forward_arr, bool left_arr, bool right_arr, bool space, std::pair<float,float> gravity_force)
+launched Player::update_pos(bool forward_arr, bool left_arr, bool right_arr, bool space, bool a, std::pair<float,float> gravity_force)
 {
     float thrust = 0;
     int rotate = 0;
@@ -158,20 +171,29 @@ Projectile* Player::update_pos(bool forward_arr, bool left_arr, bool right_arr, 
     if (right_arr) {
         rotate = 1;
     }
-    
+
 
     move(thrust, gravity_force, rotate);
 
+    float ang = get_angle();
+    float xi = cos(ang * PI/180);
+    float yi = sin(ang * PI/180);
+    // std::pair<*Projectile, *Laser> launched = {NULL, NULL};
+    launched launch;
     if (space_released && space) {
         space_released = false;
-        float ang = get_angle();
-        float xi = cos(ang * PI/180);
-        float yi = sin(ang * PI/180);
         float power_const = -300;
         Projectile *p = launch_projectile(xi, yi, power_const);
-        return p;
+        launch.p = p;
     }
-    return NULL;
+
+    if (a_released && a) {
+        a_released = true;
+        Laser *l = launch_laser(xi, yi);
+        launch.l = l;
+    }
+
+    return launch;
 
 }
 

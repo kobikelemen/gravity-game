@@ -10,14 +10,13 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Fri Aug 19 10:20:16 2022
+# Make data base, printed on Sun Aug 21 22:30:08 2022
 
 # Variables
 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
- 
 ?F = $(notdir $?)
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
@@ -38,6 +37,7 @@ _ = /usr/bin/make
 # makefile (from `Makefile', line 5)
 CFLAGS = -g $(INCLUDES)
 # makefile (from `Makefile', line 1)
+ 
 MAKEFILE_LIST :=  Makefile
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
@@ -58,7 +58,7 @@ SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.xLXv66wkje/Listeners
 # environment
 CONDA_EXE = /Users/kobikelemen/opt/anaconda3/bin/conda
 # makefile (from `Makefile', line 9)
-OBJS = main.o game.o object.o player.o planet.o gravity_objects.o
+OBJS = main.o game.o object.o player.o planet.o gravity_objects.o laser.o
 # environment
 PWD = /Users/kobikelemen/Documents/computing/coding/c++/gravity-game
 # environment
@@ -74,7 +74,7 @@ VSCODE_CODE_CACHE_PATH = /Users/kobikelemen/Library/Application Support/Code/Cac
 # environment
 LOGNAME = kobikelemen
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 CONDA_PROMPT_MODIFIER = (base) 
 # environment
@@ -126,6 +126,7 @@ MFLAGS = -Rrqp
 # environment
 XPC_SERVICE_NAME = application.com.microsoft.VSCode.71865736.71865742
 # automatic
+ 
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
 +F = $(notdir $+)
@@ -144,7 +145,6 @@ CONDA_PYTHON_EXE = /Users/kobikelemen/opt/anaconda3/bin/python
 # automatic
 ^F = $(notdir $^)
 # default
- 
 SUFFIXES := 
 # environment
 _CE_M = 
@@ -157,6 +157,7 @@ CONDA_PREFIX = /Users/kobikelemen/opt/anaconda3
 # environment
 VSCODE_PID = 7273
 # environment
+ 
 _CE_CONDA = 
 # environment
 LANG = C
@@ -169,15 +170,23 @@ LANG = C
 
 # Directories
 
-# . (device 16777221, inode 71232422): 33 files, no impossibilities.
+# . (device 16777221, inode 71232422): 41 files, no impossibilities.
 
-# 33 files, no impossibilities in 1 directories.
+# 41 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
 # No implicit rules.
 
 # Files
+
+laser.o: laser.cpp laser.h
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 34):
+	$(CC) $(CFLAGS) -c laser.cpp laser.h
+	
 
 # Not a target:
 all:
@@ -207,11 +216,12 @@ game.h:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+ 
 
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-08-19 10:14:58
+#  Last modified 2022-08-21 22:29:41
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -223,12 +233,12 @@ game.cpp:
 #  Modification time never checked.
 #  File has not been updated.
 
-planet.o: planet.cpp planet.h
+planet.o: planet.cpp planet.h laser.h
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 28):
-	$(CC) $(CLFLAGS) -c planet.cpp planet.h object.h gravity_objects.h
+	$(CC) $(CLFLAGS) -c planet.cpp planet.h object.h gravity_objects.h laser.h
 	
 
 # Not a target:
@@ -252,6 +262,12 @@ player.h:
 #  File has not been updated.
 
 # Not a target:
+laser.h:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
 player.cpp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -263,12 +279,18 @@ player.cpp:
 #  Modification time never checked.
 #  File has not been updated.
 
+# Not a target:
+laser.cpp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
 clean:
 #  Implicit rule search has not been done.
  
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 35):
+#  commands to execute (from `Makefile', line 38):
 	rm -f $(OBJS) *~
 	
 
@@ -292,7 +314,7 @@ object.cpp:
 #  Modification time never checked.
 #  File has not been updated.
 
-main: main.o game.o object.o player.o planet.o gravity_objects.o
+main: main.o game.o object.o player.o planet.o gravity_objects.o laser.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -328,21 +350,21 @@ gravity_objects.h:
 
 # Not a target:
 gravity_objects.cpp:
- 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
-player.o: player.cpp player.h
+player.o: player.cpp player.h laser.h
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 25):
-	$(CC) $(CFLAGS) -c player.cpp player.h
+	$(CC) $(CFLAGS) -c player.cpp player.h laser.h
+ 
 	
 
 # files hash-table stats:
-# Load=23/1024=2%, Rehash=0, Collisions=0/56=0%
+# Load=26/1024=3%, Rehash=0, Collisions=0/64=0%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -354,6 +376,6 @@ player.o: player.cpp player.h
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Aug 19 10:20:16 2022
+# Finished Make data base on Sun Aug 21 22:30:08 2022
 
  
