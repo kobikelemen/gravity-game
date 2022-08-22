@@ -13,11 +13,11 @@ int main()
     Planet *planet1 = new Planet(planet_x, planet_y, planet_radius, planet_mass);
 
     
-    float planet2_x = 500.f;
-    float planet2_y = 500.f;
-    float planet2_radius = 100.f;
-    float planet2_mass = 10000000000000000.f;
-    Planet *planet2 = new Planet(planet2_x, planet2_y, planet2_radius, planet2_mass);
+    // float planet2_x =S 500.f;
+    // float planet2_y = 500.f;
+    // float planet2_radius = 100.f;
+    // float planet2_mass = 10000000000000000.f;
+    // Planet *planet2 = new Planet(planet2_x, planet2_y, planet2_radius, planet2_mass);
 
 
     float rotate_speed = 180.f; // degs/sec
@@ -47,7 +47,7 @@ int main()
     sf::Vector2f screen_dimensions = {600.f, 600.f};
     Game game(player, screen_dimensions);
     game.set_player2(player2);
-    game.add_planet(planet2);
+    // game.add_planet(planet2);
     game.add_planet(planet1);
     game.add_moon(moon1);
     // game.add_moon(moon2);

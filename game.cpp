@@ -138,26 +138,20 @@ void Game::check_collisions()
 Move Game::check_keyboard()
 {
     Move move;
-    printf("\nyo1");
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
         move.left = true;
-        printf("\nyo2");
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
         move.right = true;
-        printf("\nyo3");
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
         move.up = true;
-        printf("\nyo4");
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
         move.space = true;
-        printf("\nyo5");
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         move.a = true;
-        printf("\nyo6");
     }
     return move;
 }
@@ -176,7 +170,6 @@ void Game::update_player1()
     
 
     Move move = check_keyboard();
-    printf("\n move: up %i left %i right %i space %i a %i ", move.up, move.left, move.right, move.space, move.a);
     launched launch = player->update_pos(move.up, move.left, move.right, move.space, move.a, gravity_force);
 
     if (launch.p) {

@@ -1,16 +1,16 @@
 CC = g++ -std=c++11
 
-INCLUDES = -I/usr/local/Cellar/sfml/2.5.1_1/include/
+# INCLUDES = -I/usr/local/Cellar/sfml/2.5.1_1/include/
 
-CFLAGS = -g $(INCLUDES)
+CFLAGS = -g
 
-LDFLAGS = -L/usr/local/Cellar/sfml/2.5.1_1/lib/
+# LDFLAGS = -L/usr/local/Cellar/sfml/2.5.1_1/lib/
 
 OBJS = main.o game.o object.o player.o planet.o gravity_objects.o laser.o
 
 
 main: $(OBJS)
-	$(CC) $(OBJS) $(LDFLAGS) -lsfml-graphics -lsfml-window -lsfml-system -o main
+	$(CC) $(OBJS) -lsfml-graphics -lsfml-window -lsfml-system -o main
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) -c main.cpp
@@ -32,7 +32,6 @@ gravity_objects.o: gravity_objects.cpp gravity_objects.h object.h planet.h
 
 laser.o: laser.cpp laser.h
 	$(CC) $(CFLAGS) -c laser.cpp laser.h
-
 
 clean:
 	rm -f $(OBJS) *~

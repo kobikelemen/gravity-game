@@ -3,12 +3,12 @@
 
 Laser::Laser(float x, float y, float ix, float iy)
 {
-    velx = 100.f * ix;
-    vely = 100.f * iy;
+    velx = -500.f * ix;
+    vely = -500.f * iy;
     posx = x;
     posy = y;
     angle = atan((iy/ ix) * 180/M_PI);
-    this->shape = new sf::RectangleShape(sf::Vector2f(3.f, 1.f));
+    this->shape = new sf::RectangleShape(sf::Vector2f(5.f, 3.f));
     shape->setRotation(angle);
     this->shape->setFillColor(sf::Color::Yellow);
     this->shape->setPosition(x,y);
@@ -30,6 +30,7 @@ void Laser::update_pos()
     float dt = clock.getElapsedTime().asSeconds();
     posx += velx * dt;
     posy += vely * dt;
+    shape->setPosition(posx,posy);
 
 }
 
