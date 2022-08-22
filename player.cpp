@@ -41,6 +41,7 @@ Projectile* Rocket::launch_projectile(float xi, float yi, float power_const)
 
 Laser* Rocket::launch_laser(float xi, float yi)
 {
+    printf("\n LASER LAUNCHED");
     Laser *l = new Laser(posx, posy, xi, yi);
     return l;
 }
@@ -188,7 +189,7 @@ launched Player::update_pos(bool forward_arr, bool left_arr, bool right_arr, boo
     }
 
     if (a_released && a) {
-        a_released = true;
+        a_released = false;
         Laser *l = launch_laser(xi, yi);
         launch.l = l;
     }
@@ -201,4 +202,9 @@ launched Player::update_pos(bool forward_arr, bool left_arr, bool right_arr, boo
 void Player::set_space_released(bool s)
 {
     space_released = s;
+}
+
+void Player::set_a_released(bool s)
+{
+    a_released = s;
 }

@@ -114,7 +114,7 @@ void Planet::on_collision(Projectile *proj)
 
 bool Planet::check_collision_projectile(Projectile *proj)
 {
-    printf("\nplanet centre %f %f", centrex, centrey);
+
     if (sqrt(pow(abs(centrex - proj->get_centrex()), 2) + pow(abs(centrey - proj->get_centrey()), 2)) < radius) {
         // update_image_collision(proj);
         on_collision(proj);
@@ -125,7 +125,7 @@ bool Planet::check_collision_projectile(Projectile *proj)
 
 bool Planet::check_collision_laser(Laser *laser)
 {
-    printf("\nplanet centre %f %f", centrex, centrey);
+
     if (sqrt(pow(abs(centrex - laser->get_centrex()), 2) + pow(abs(centrey - laser->get_centrey()), 2)) < radius) {
         // update_image_collision(proj);
         // on_collision(proj);

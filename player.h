@@ -59,6 +59,7 @@ public:
     ~Player();
     launched update_pos(bool forward_arr, bool left_arr, bool right_arr, bool space, bool a, std::pair<float,float> gravity_force);
     void set_space_released(bool s);
+    void set_a_released(bool s);
 };
 
 #endif

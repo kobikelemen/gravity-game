@@ -1,5 +1,11 @@
-make --dry-run --keep-going --print-directory
+make --dry-run --always-make --keep-going --print-directory
 make: Entering directory `/Users/kobikelemen/Documents/computing/coding/c++/gravity-game'
+g++ -std=c++11 -g -I/usr/local/Cellar/sfml/2.5.1_1/include/ -c main.cpp
+g++ -std=c++11 -g -I/usr/local/Cellar/sfml/2.5.1_1/include/ -c game.cpp game.h player.h object.h
+g++ -std=c++11 -g -I/usr/local/Cellar/sfml/2.5.1_1/include/ -c object.cpp object.h
+g++ -std=c++11 -g -I/usr/local/Cellar/sfml/2.5.1_1/include/ -c player.cpp player.h laser.h
+g++ -std=c++11  -c planet.cpp planet.h object.h gravity_objects.h laser.h
+g++ -std=c++11 -g -I/usr/local/Cellar/sfml/2.5.1_1/include/ -c gravity_objects.cpp gravity_objects.h object.h planet.h
 g++ -std=c++11 -g -I/usr/local/Cellar/sfml/2.5.1_1/include/ -c laser.cpp laser.h
 g++ -std=c++11 main.o game.o object.o player.o planet.o gravity_objects.o laser.o -L/usr/local/Cellar/sfml/2.5.1_1/lib/ -lsfml-graphics -lsfml-window -lsfml-system -o main
 make: Leaving directory `/Users/kobikelemen/Documents/computing/coding/c++/gravity-game'
