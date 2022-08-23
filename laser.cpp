@@ -8,7 +8,7 @@ Laser::Laser(float x, float y, float ix, float iy)
     posx = x;
     posy = y;
     angle = atan((iy/ ix) * 180/M_PI);
-    this->shape = new sf::RectangleShape(sf::Vector2f(5.f, 3.f));
+    this->shape = new sf::RectangleShape(sf::Vector2f(10.f, 3.f));
     shape->setRotation(angle);
     this->shape->setFillColor(sf::Color::Yellow);
     this->shape->setPosition(x,y);

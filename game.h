@@ -9,6 +9,8 @@
 #include "player.h"
 #include "planet.h"
 #include "gravity_objects.h"
+#include "arrow.h"
+
 
 struct Move
 {
@@ -35,9 +37,13 @@ class Game
     std::vector<Laser*> lasers;
     Player *player;
     Player *player2;
+    Arrow *enemy_planet_arrow;
+
+
     sf::Clock p2_deadtimer;
     sf::Vector2f mousepos;
     sf::Vector2f screen_dim;
+    sf::Vector2f screen_pos;
     bool button_released;
     void poll_events();
     void check_click();
@@ -48,7 +54,7 @@ class Game
     void update_player2();
     void update_screen_pos();
     void update_lasers();
-    
+    void update_arrows();
     Move check_keyboard();
 
 public:

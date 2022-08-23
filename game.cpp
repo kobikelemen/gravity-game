@@ -12,6 +12,7 @@ Game::Game(Player *p, sf::Vector2f screen_dimensions)
     stars_sprite = new sf::Sprite(*stars_texture);
     view = new sf::View();
     screen_dim = screen_dimensions;
+    enemy_planet_arrow = new Arrow(screen_dim);
 }
 
 
@@ -49,6 +50,12 @@ void Game::render()
         player2->render(window);
     }
     
+    if (abs(planets[0]->get_centrex() - player->get_posx()) > screen_dim.x/2 || abs(planets[0]->get_centrey() - player->get_posy()) > screen_dim.y/2) {
+        enemy_planet_arrow->render(window);
+        printf("\n RENDERING");
+    } else {
+        printf("\n NOT");
+    }
     window->display();
 }
 
@@ -56,7 +63,6 @@ void Game::update_gravity_objects()
 {
     std::vector<std::pair<float,float>> proj_forces;
     std::vector<std::pair<float,float>> moon_forces;
-
     for ( Projectile *proj : projectiles ) {
 
         // for (Moon *moon : moons) {
@@ -205,7 +211,7 @@ void Game::update_screen_pos()
 {
     float x = player->get_posx() - screen_dim.x/2;
     float y = player->get_posy() - screen_dim.y/2;
-
+    screen_pos = sf::Vector2f(x,y);
     view->reset(sf::FloatRect(x, y, screen_dim.x, screen_dim.y));
     stars_sprite->setPosition(x,y);
 }
@@ -214,18 +220,34 @@ void Game::update_screen_pos()
 
 void Game::update_lasers()
 {
+    int i = 0;
     for (Laser *laser : lasers) {
         laser->update_pos();
+        if (
+            (abs(laser->get_centrex() - player->get_posx()) > screen_dim.x + 1000.f 
+            && abs(laser->get_centrex() - player2->get_posx()) > screen_dim.x + 1000.f)
+            || (abs(laser->get_centrey() - player->get_posy()) > screen_dim.y + 1000.f 
+            && abs(laser->get_centrey() - player2->get_posy()) > screen_dim.y + 1000.f)
+            ) {
+                lasers.erase(lasers.begin() + i);
+                delete laser;
+            }
+        i++;
     }
+}
+
+
+void Game::update_arrows()
+{
+    enemy_planet_arrow->update_pos(planets[0]->get_centrex(), planets[0]->get_centrey(), player->get_posx(), player->get_posy());
+
 }
 
 
 
 void Game::update()
 {
-    poll_events();
-        
-    
+    poll_events();    
 
     update_gravity_objects();
 
@@ -239,8 +261,7 @@ void Game::update()
 
     update_screen_pos();
 
-
-    
+    update_arrows();
 
 }
 
