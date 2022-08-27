@@ -5,6 +5,7 @@
 #include <asio.hpp>
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
+#include <chrono>
 
 #include "server.h"
 
@@ -51,21 +52,27 @@ Server::~Server()
     delete acceptor;
 }
 
+
+
 void Server::grab_data()
 {
-    std::vector<char> buf(256);
-
+    std::cout << "YOO" << std::endl;
     socket->async_read_some(asio::buffer(buf.data(), buf.size()),
-        [this](std::error_code ec, std::size_t length, std::vector<char> buf)
+        [this](std::error_code ec, std::size_t length)
         {
+
+
             if (!ec) {
                 std::cout << "Recieved" << std::endl;
                 for (int i=0; i < length; i ++) {
                     std::cout << buf[i];
                 }
                 send_data(buf);
-                grab_data();
+                
+            } else {
+                std::cout << "Read failed" << std::endl;
             }
+            grab_data();
         }
     );
 }
@@ -75,23 +82,25 @@ void Server::send_data(std::vector<char> data)
 {
     std::string strdata(data.begin(), data.end());
     strdata += "echo";
-    asio::write(socket, asio::buffer(strdata));
+    asio::write(*socket, asio::buffer(strdata));
 }
 
 void Server::wait_for_connection()
 {
     acceptor->accept(*socket);
-
-    // acceptor->async_accept(
-    //     [this](std::error_code ec, asio::ip::tcp::socket socket) {
-
-    //     }
-    // )
+    grab_data();
 }
 
 
 int main()
 {
+
     Server server;
+    for (;;)
+    {
+        // std::this_thread::sleep_for(std::chrono::milliseconds());
+    }
+    
+
     
 }

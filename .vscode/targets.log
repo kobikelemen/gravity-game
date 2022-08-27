@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Mon Aug 22 10:20:29 2022
+# Make data base, printed on Sat Aug 27 14:13:55 2022
 
 # Variables
 
@@ -18,6 +18,9 @@ make: *** No rule to make target `all'.  Stop.
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
 ?F = $(notdir $?)
+# environment
+ 
+ELECTRON_NO_ATTACH_CONSOLE = 1
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # makefile (from `Makefile', line 3)
@@ -41,9 +44,11 @@ MAKEFILE_LIST :=  Makefile
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_CWD = /
+VSCODE_CWD = /Users/kobikelemen/Documents/computing/coding/c++/gravity-game
 # environment
 PATH = /Users/kobikelemen/opt/anaconda3/bin:/Users/kobikelemen/opt/anaconda3/condabin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/kobikelemen/flutter/bin
+# environment
+LaunchInstanceID = 38118731-3DC0-464E-93D1-78A747206325
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # makefile (from `Makefile', line 7)
@@ -51,7 +56,7 @@ LDFLAGS = -L/usr/local/Cellar/sfml/2.5.1_1/lib/
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.xLXv66wkje/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.I8yzspFbYg/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -68,6 +73,8 @@ VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 HOME = /Users/kobikelemen
 # default
 MAKEFILEPATH = $(shell /usr/bin/xcode-select -print-path 2>/dev/null || echo /Developer)/Makefiles
+# environment
+VSCODE_CLI = 1
 # environment
 VSCODE_CODE_CACHE_PATH = /Users/kobikelemen/Library/Application Support/Code/CachedData/e4503b30fc78200f846c62cf8091b76ff5547662
 # environment
@@ -89,7 +96,7 @@ MAKE = $(MAKE_COMMAND)
 # default
 MAKECMDGOALS := all
 # environment
-SHLVL = 1
+SHLVL = 3
 # makefile (from `Makefile', line 1)
 CC = g++ -std=c++11
 # environment
@@ -100,12 +107,16 @@ MAKE_VERSION := 3.81
 USER = kobikelemen
 # makefile
 .DEFAULT_GOAL := main
+# environment
+TERM_SESSION_ID = 491A06CE-9599-4AFD-BCCD-40406C09443D
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
 CONDA_SHLVL = 1
 # default
 MAKE_COMMAND := /Library/Developer/CommandLineTools/usr/bin/make
+# environment
+TERM_PROGRAM = Apple_Terminal
 # default
 .VARIABLES := 
 # environment
@@ -118,12 +129,15 @@ VSCODE_IPC_HOOK = /Users/kobikelemen/Library/Application Support/Code/1.70.2-mai
 MallocNanoZone = 0
 # makefile
 MAKEFLAGS = Rrqp
+ 
 # environment
 MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.71865736.71865742
+TERM_PROGRAM_VERSION = 445
+# environment
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.71865736.71865742.2B15F3B0-49DC-446F-9D1A-DE7C0D2D27E4
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
@@ -140,6 +154,8 @@ MAKEFILES :=
 LC_ALL = C
 # environment
 CONDA_PYTHON_EXE = /Users/kobikelemen/opt/anaconda3/bin/python
+# environment
+SECURITYSESSIONID = 186a6
 # automatic
 ^F = $(notdir $^)
 # default
@@ -153,13 +169,15 @@ MAKELEVEL := 0
 # environment
 CONDA_PREFIX = /Users/kobikelemen/opt/anaconda3
 # environment
-VSCODE_PID = 60379
+TERM = xterm-256color
+# environment
+VSCODE_PID = 484
 # environment
 _CE_CONDA = 
 # environment
 LANG = C
 # variable set hash-table stats:
-# Load=72/1024=7%, Rehash=0, Collisions=6/97=6%
+# Load=80/1024=8%, Rehash=0, Collisions=6/105=6%
 
 # Pattern-specific Variable Values
 
@@ -167,7 +185,7 @@ LANG = C
 
 # Directories
 
-# . (device 16777221, inode 71232422): 43 files, no impossibilities.
+# . (device 16777225, inode 71232422): 43 files, no impossibilities.
 
 # 43 files, no impossibilities in 1 directories.
 
@@ -229,6 +247,7 @@ game.cpp:
 #  Modification time never checked.
 #  File has not been updated.
 
+ 
 planet.o: planet.cpp planet.h laser.h
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -314,7 +333,6 @@ main: main.o game.o object.o player.o planet.o gravity_objects.o laser.o
 #  Modification time never checked.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 13):
- 
 	$(CC) $(OBJS) $(LDFLAGS) -lsfml-graphics -lsfml-window -lsfml-system -o main
 	
 
@@ -371,6 +389,6 @@ player.o: player.cpp player.h laser.h
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Mon Aug 22 10:20:29 2022
+# Finished Make data base on Sat Aug 27 14:13:55 2022
 
  
