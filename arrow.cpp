@@ -39,7 +39,7 @@ void Arrow::update_pos(float targetx, float targety, float playerx, float player
     } else {
         maxy = dy;
     }
-    printf("\nmax %f %f", maxx, maxy);    
+
     posx = maxx * xi + playerx;
     posy = maxy * yi + playery;
     shape->setPosition(posx,posy);

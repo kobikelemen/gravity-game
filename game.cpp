@@ -306,3 +306,6 @@ void Game::add_moon(Moon *m)
 {
     moons.push_back(m);
 }
+
+
+
