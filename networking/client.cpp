@@ -26,17 +26,18 @@ void Client::grab_data()
 {
     std::vector<char> buf(256);
 
-    asio::async_read_some(asio::buffer(buf.data(), buf.size())),
-    [this](std::error_code ec, std::size_T length) 
-    {
-        if (!ec) {
-            std::cout << "Recieved" << std::endl;
-            for (int i=0; i < length; i++) {
-                std::cout << buffer[i];
-            }
-            grab_data();
-        } 
-    }
+    socket->async_read_some(asio::buffer(buf.data(), buf.size())),
+        [this](std::error_code ec, std::size_t length) 
+        {
+            if (!ec) {
+                std::cout << "Recieved" << std::endl;
+                for (int i=0; i < length; i++) {
+                    std::cout << buf[i];
+                }
+                grab_data();
+            } 
+        }
+    );
 }
 
 
