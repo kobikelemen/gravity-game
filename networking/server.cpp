@@ -32,9 +32,9 @@ void Server::grab_data()
             if (!ec) {
                 std::cout << "Recieved" << std::endl;
                 for (int i=0; i < length; i ++) {
-                    std::cout << buf[i];
+                    std::cout << buf[i] << std::endl;
                 }
-                // send_data(buf);
+                send_data(buf);
                 
             } else {
                 std::cout << "Read failed" << std::endl;
@@ -46,7 +46,7 @@ void Server::grab_data()
 
 
 void Server::send_data(std::vector<char> data)
-{
+{    
     std::string strdata(data.begin(), data.end());
     strdata += "echo";
     std::cout << "sending: " << strdata << std::endl;

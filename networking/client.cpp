@@ -2,7 +2,7 @@
 
 Client::Client()
 {
-
+    buf = std::vector<char>(1024 * 10);
     std::string ip_address = "192.168.0.91"; // mac
     endpoint = new asio::ip::tcp::endpoint(asio::ip::make_address(ip_address,ec),1234);
     socket = new asio::ip::tcp::socket(context);
@@ -12,8 +12,8 @@ Client::Client()
     } else {
         std::cout << "Connection Failed\n" << ec.message() << std::endl;
     }
-    // grab_data();
-    // asio::io_context::work idle_work(context);
+    grab_data();
+    asio::io_context::work idle_work(context);
 
 }
 
@@ -57,12 +57,11 @@ int main()
     Client client;
     
     // client.context.run();
-    // std::thread context_thread = std::thread([&]() { client.context.run(); });
+    std::thread context_thread = std::thread([&]() { client.context.run(); });
     int i=0;
-
     for (;;) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        client.send_data("yoooo");
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        client.send_data(std::to_string(i));
         i++;
         
     }
