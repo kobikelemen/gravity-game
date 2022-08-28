@@ -1,49 +1,17 @@
 
-
-#include <iostream>
-#include <thread>
-#include <asio.hpp>
-#include <asio/ts/buffer.hpp>
-#include <asio/ts/internet.hpp>
-#include <chrono>
-
 #include "server.h"
 
 // g++ server.cpp -I/home/linuxbrew/.linuxbrew/Cellar/asio/1.24.0/include -o server
-
-// std::string read_(asio::ip::tcp::socket & socket) {
-//        asio::streambuf buf;
-//        asio::read_until( socket, buf, "\n" );
-//        std::string data = asio::buffer_cast<const char*>(buf.data());
-//        return data;
-// }
-
-// int main()
-// {
-
-//     acceptor = new asio::ip::tcp::acceptor(io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), 1234 ));
-
-//     for (;;) {
-//         asio::ip::tcp::socket socket_(io_service);
-
-//         acceptor.accept(socket_);
-
-//         std::string message = read_(socket_);
-//         std::cout << message << std::endl;
-//     }
-    
-// }
-
-
 
 
 
 Server::Server()
 {
+    buf = std::vector<char>(1024 * 10);
     acceptor = new asio::ip::tcp::acceptor(context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), 1234 ));
-    socket = new asio::ip::tcp::socket(context);
-    
+    socket = new asio::ip::tcp::socket(context);    
     wait_for_connection();
+    asio::io_context::work idle_work(context);
 }
 
 Server::~Server()
@@ -56,7 +24,6 @@ Server::~Server()
 
 void Server::grab_data()
 {
-    std::cout << "YOO" << std::endl;
     socket->async_read_some(asio::buffer(buf.data(), buf.size()),
         [this](std::error_code ec, std::size_t length)
         {
@@ -67,7 +34,7 @@ void Server::grab_data()
                 for (int i=0; i < length; i ++) {
                     std::cout << buf[i];
                 }
-                send_data(buf);
+                // send_data(buf);
                 
             } else {
                 std::cout << "Read failed" << std::endl;
@@ -82,6 +49,7 @@ void Server::send_data(std::vector<char> data)
 {
     std::string strdata(data.begin(), data.end());
     strdata += "echo";
+    std::cout << "sending: " << strdata << std::endl;
     asio::write(*socket, asio::buffer(strdata));
 }
 
@@ -96,6 +64,7 @@ int main()
 {
 
     Server server;
+    std::thread context_thread = std::thread([&]() { server.context.run(); });
     for (;;)
     {
         // std::this_thread::sleep_for(std::chrono::milliseconds());

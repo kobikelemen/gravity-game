@@ -12,7 +12,9 @@ Client::Client()
     } else {
         std::cout << "Connection Failed\n" << ec.message() << std::endl;
     }
-    grab_data();
+    // grab_data();
+    // asio::io_context::work idle_work(context);
+
 }
 
 Client::~Client()
@@ -45,7 +47,7 @@ void Client::send_data(std::string data)
 {
     // std::string strdata(data.begin(), data.end());
     std::cout << "data sent" << std::endl;
-    asio::write(*socket, asio::buffer(data));
+    asio::write(*socket, asio::buffer(data, sizeof(data)));
 }
 
 
@@ -53,11 +55,16 @@ void Client::send_data(std::string data)
 int main()
 {
     Client client;
+    
+    // client.context.run();
+    // std::thread context_thread = std::thread([&]() { client.context.run(); });
     int i=0;
+
     for (;;) {
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        client.send_data(std::to_string(i));    
+        client.send_data("yoooo");
+        i++;
+        
     }
-
 
 }
