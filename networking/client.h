@@ -11,7 +11,7 @@ class Client
     asio::ip::tcp::endpoint *endpoint;
     asio::ip::tcp::socket *socket;
     asio::error_code ec;
-    std::vector<char> buf;
+    std::vector<int32_t> buf;
     void grab_data();
 
 public:

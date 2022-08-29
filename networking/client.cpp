@@ -2,8 +2,8 @@
 
 Client::Client()
 {
-    buf = std::vector<char>(1024 * 10);
-    std::string ip_address = "192.168.0.91"; // mac
+    buf = std::vector<int32_t>(1024 * 10);
+    std::string ip_address = "192.168.0.91";
     endpoint = new asio::ip::tcp::endpoint(asio::ip::make_address(ip_address,ec),1234);
     socket = new asio::ip::tcp::socket(context);
     socket->connect(*endpoint, ec);
@@ -45,7 +45,6 @@ void Client::grab_data()
 
 void Client::send_data(std::string data)
 {
-    // std::string strdata(data.begin(), data.end());
     std::cout << "data sent" << std::endl;
     asio::write(*socket, asio::buffer(data, sizeof(data)));
 }
@@ -54,9 +53,7 @@ void Client::send_data(std::string data)
 
 int main()
 {
-    Client client;
-    
-    // client.context.run();
+    Client client;    
     std::thread context_thread = std::thread([&]() { client.context.run(); });
     int i=0;
     for (;;) {
