@@ -2,6 +2,18 @@
 
 Client::Client()
 {
+
+}
+
+Client::~Client()
+{
+    delete endpoint;
+    delete socket;
+}
+
+
+void Client::start_connection()
+{
     buf = std::vector<float>(1024 * 10);
     std::string ip_address = "192.168.0.91";
     endpoint = new asio::ip::tcp::endpoint(asio::ip::make_address(ip_address,ec),1234);
@@ -14,15 +26,7 @@ Client::Client()
     }
     grab_data();
     asio::io_context::work idle_work(context);
-
 }
-
-Client::~Client()
-{
-    delete endpoint;
-    delete socket;
-}
-
 
 
 void Client::grab_data()
@@ -48,11 +52,11 @@ void Client::grab_data()
 }
 
 
-void Client::send_data(std::string data)
+void Client::send_data(Move controls)
 {
     std::cout << "data sent" << std::endl;
-    Move c(true,false,true,true,false);
-    ControlMessage cmsg(c);
+    // Move c(true,false,true,true,false);
+    ControlMessage cmsg(controls);
     asio::write(*socket, asio::buffer(cmsg.body));
 }
 
@@ -60,7 +64,8 @@ void Client::send_data(std::string data)
 
 int main()
 {
-    Client client;    
+    Client client; 
+    client.start_connection();   
     std::thread context_thread = std::thread([&]() { client.context.run(); });
     int i=0;
     for (;;) {

@@ -1,4 +1,4 @@
-#include "gravity_objects.h"
+ #include "gravity_objects.h"
 
 
 
@@ -23,6 +23,15 @@ void GravityObject::set_radius(float r)
     radius = r;
 }
 
+float GravityObject::get_velx()
+{
+    return velx;
+}
+
+float GravityObject::get_vely()
+{
+    return vely;
+}
 
 
 GravityObject::GravityObject(float x, float y, float vx, float vy, float r, float m) : Object(x, y, m)

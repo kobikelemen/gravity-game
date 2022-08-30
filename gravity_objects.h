@@ -23,6 +23,8 @@ public:
     // virtual void render(sf::RenderWindow* window) = 0;
     float get_centrex();
     float get_centrey();
+    float get_velx();
+    float get_vely();
     float get_radius();
     void set_radius(float r);
     virtual void set_position(float x, float y) = 0;

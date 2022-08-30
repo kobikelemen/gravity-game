@@ -10,24 +10,25 @@
 #include <chrono>
 #include <thread>
 #include "threadsafe_queue.h"
-
+#include "message.h"
 
 class Server
 {
-    tsQueue<ControlMessage> ts_queue;
+    
     asio::ip::tcp::acceptor *acceptor;
     asio::ip::tcp::socket *socket;
-    
     asio::error_code ec;
     std::vector<int> buf;
     void wait_for_connection();
 
 public:
+    tsQueue<ControlMessage> ts_queue;
     asio::io_context context;
     Server();
     ~Server();
     void grab_data();
-    void send_data(std::vector<float> data);
+    void send_data(game_state state);
+    void start_connection();
 
 };
 

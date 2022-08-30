@@ -21,20 +21,20 @@ struct projectile_state
 };
 
 
-struct pos
+struct player_state
 {
     float x;
     float y;
-    pos(float _x, float _y);
-    pos();
+    player_state(float _x, float _y);
+    player_state();
 };
 
 
 struct game_state
 {
-    pos planet_pos;
-    pos player1_pos;
-    pos player2_pos;
+    // pos planet_pos;
+    player_state player1_state;
+    player_state player2_state;
     // projectile_state projectiles[];
     std::vector<projectile_state> projectiles;
     game_state();

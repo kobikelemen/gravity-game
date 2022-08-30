@@ -12,7 +12,7 @@
 
 class Client
 {
-    tsQueue<GamestateMessage> ts_queue;
+    
     asio::ip::tcp::endpoint *endpoint;
     asio::ip::tcp::socket *socket;
     asio::error_code ec;
@@ -20,11 +20,14 @@ class Client
     void grab_data();
 
 public:
-    asio::io_context context;
+    
+    tsQueue<GamestateMessage> ts_queue;
+    asio::io_context context;   
     Client();
     ~Client();
     // void read_data();
-    void send_data(std::string data);
+    void start_connection();
+    void send_data(Move controls);
 
 };
 

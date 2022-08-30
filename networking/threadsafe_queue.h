@@ -23,6 +23,7 @@ public:
     tsQueue();
     void push_front(T msg);
     void push_back(T msg);
+    void clear();
     T pop_back();
     T pop_front();
     size_t size();
@@ -75,4 +76,11 @@ template<class T>
 size_t tsQueue<T>::size()
 {
     return queue.size();
+}
+
+template<class T>
+void tsQueue<T>::clear()
+{
+    std::scoped_lock lock(queue_mutex);
+    queue.clear();
 }

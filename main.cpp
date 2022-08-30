@@ -13,7 +13,7 @@ int main()
     Planet *planet1 = new Planet(planet_x, planet_y, planet_radius, planet_mass);
 
     
-    // float planet2_x =S 500.f;
+    // float planet2_x = 500.f;
     // float planet2_y = 500.f;
     // float planet2_radius = 100.f;
     // float planet2_mass = 10000000000000000.f;

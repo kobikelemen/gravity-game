@@ -52,23 +52,18 @@ void Game::render()
     
     if (abs(planets[0]->get_centrex() - player->get_posx()) > screen_dim.x/2 || abs(planets[0]->get_centrey() - player->get_posy()) > screen_dim.y/2) {
         enemy_planet_arrow->render(window);
-        printf("\n RENDERING");
-    } else {
-        printf("\n NOT");
     }
     window->display();
 }
+
+
 
 void Game::update_gravity_objects()
 {
     std::vector<std::pair<float,float>> proj_forces;
     std::vector<std::pair<float,float>> moon_forces;
+
     for ( Projectile *proj : projectiles ) {
-
-        // for (Moon *moon : moons) {
-        //     moon_forces.push_back(planet->gravity(moon->get_mass(), moon->get_posx(), moon->get_posy()));
-        // }
-
         for (Planet *planet : planets) {
             proj_forces.push_back(planet->gravity(proj->get_mass(), proj->get_posx(), proj->get_posy()));
         }
@@ -77,19 +72,12 @@ void Game::update_gravity_objects()
     }
 
     for (Moon *moon : moons) {
-
         for (Planet *planet : planets) {
             moon_forces.push_back(planet->gravity(moon->get_mass(), moon->get_posx(), moon->get_posy()));
         }
         moon->update_pos(moon_forces);
     }
-
-
 }
-
-
-
-
 
 
 void Game::update_mousepos()
@@ -122,7 +110,6 @@ void Game::check_collisions()
         for (Projectile * proj : projectiles) {
             bool c = planet->check_collision_projectile(proj);
             if (c) {
-
                 projectiles.erase(projectiles.begin()+i);
                 delete proj;
             }
@@ -162,21 +149,17 @@ Move Game::check_keyboard()
     return move;
 }
 
-void Game::update_player1()
-{
-    // check_click();
-    std::pair<float,float> gravity_force = {0.f,0.f};
 
+void Game::update_player(Player *p, Move move)
+{
+    std::pair<float,float> gravity_force = {0.f,0.f};
     for (Planet * planet : planets) {
-        std::pair<float,float> force = planet->gravity(player->get_mass(), player->get_posx(), player->get_posy());
+        std::pair<float,float> force = planet->gravity(p->get_mass(), p->get_posx(), p->get_posy());
         gravity_force.first += force.first;
         gravity_force.second += force.second;
     }
 
-    
-
-    Move move = check_keyboard();
-    launched launch = player->update_pos(move.up, move.left, move.right, move.space, move.a, gravity_force);
+    launched launch = p->update_pos(move.up, move.left, move.right, move.space, move.a, gravity_force);
 
     if (launch.p) {
         projectiles.push_back(launch.p);
@@ -184,21 +167,22 @@ void Game::update_player1()
     if (launch.l) {
         lasers.push_back(launch.l);
     }
-
 }
 
 
-void Game::update_player2()
+void Game::update_player2(Move move)
 {
+
+
+
     if (player2->is_alive()) {
-        
         std::vector<std::pair<float,float>> proj_positions;
         for (Projectile *proj : projectiles) {
             proj_positions.push_back(std::pair<float,float>(proj->get_centrex(), proj->get_centrey()));
         }
-
         player2->check_collision(proj_positions);
         p2_deadtimer.restart();
+
     } else if (p2_deadtimer.getElapsedTime().asSeconds() > 3) {
         player2->set_alive(true);
         player2->set_posx(planets[1]->get_centrex()+planets[1]->get_radius()+50.f);
@@ -244,24 +228,76 @@ void Game::update_arrows()
 }
 
 
+void Game::send_game_state(game_state state)
+{
+    server.send_data(state);
+}
+
+
+game_state Game::capture_game_state()
+{
+    game_state state;
+    state.player1_state.x = player->get_posx();
+    state.player1_state.y = player->get_posy();
+    state.player2_state.x = player2->get_posx();
+    state.player2_state.y = player2->get_posy();
+    for (Projectile *proj : projectiles) {
+        projectile_state proj_state;
+        proj_state.posx = proj->get_centrex();
+        proj_state.posy = proj->get_centrey();
+        proj_state.velx = proj->get_velx();
+        proj_state.vely = proj->get_vely();
+        state.projectiles.push_back(proj_state);
+    }
+    return state;
+
+}
+
+
+Move Game::get_player2_control()
+{
+    ControlMessage cmsg = server.ts_queue.pop_back();
+    server.ts_queue.clear();
+    Move move = cmsg.get_controls();
+    return move;
+}
+
+
+void Game::start_connection()
+{
+    server.start_connection();
+}
+
 
 void Game::update()
 {
-    poll_events();    
+    poll_events();
 
     update_gravity_objects();
 
     update_lasers();
+    
+    Move move1 = check_keyboard();
 
-    update_player1();
+    Move move2 = get_player2_control();
 
-    update_player2();
+    // update_player1(move1);
+
+    // update_player2(move2);
+
+    update_player(player, move1);
+
+    update_player(player2, move2);
 
     check_collisions();
 
     update_screen_pos();
 
     update_arrows();
+
+    game_state gstate = capture_game_state();
+
+    send_game_state(gstate);
 
 }
 
@@ -287,25 +323,24 @@ void Game::poll_events()
 }
 
 
-bool Game::running()
+void Game::clear_projectiles()
 {
-    return this->window->isOpen();
+    for (int i=0; i < projectiles.size(); i++) {
+        Projectile *proj = projectiles.back();
+        projectiles.pop_back();
+        delete proj;
+    }
 }
 
+bool Game::running() { return this->window->isOpen(); }
 
 void Game::add_projectile(Projectile *proj) { projectiles.push_back(proj); }
 
 void Game::add_planet(Planet *planet) { planets.push_back(planet); }
 
-void Game::set_player2(Player *p2)
-{
-    player2 = p2;
-}
+void Game::set_player2(Player *p2) { player2 = p2; }
 
-void Game::add_moon(Moon *m)
-{
-    moons.push_back(m);
-}
+void Game::add_moon(Moon *m) { moons.push_back(m); }
 
 
 
