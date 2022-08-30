@@ -3,7 +3,7 @@
 
 
 
-projectile_state::projectile_state(int32_t px, int32_t py, int32_t vx, int32_t vy) 
+projectile_state::projectile_state(float px, float py, float vx, float vy) 
 {
     posx = px;
     posy = py;
@@ -12,7 +12,7 @@ projectile_state::projectile_state(int32_t px, int32_t py, int32_t vx, int32_t v
 }
 
 
-pos::pos(int32_t _x, int32_t _y) 
+pos::pos(float _x, float _y) 
 {
     x = _x;
     y = _y;
@@ -29,20 +29,24 @@ game_state::game_state()
 }
 
 
-Message::Message(game_state state)
+GamestateMessage::GamestateMessage(game_state state)
 {
     serialize(state);
+    gstate = state;
 }
 
 
-Message::Message(std::vector<char> buffer)
+GamestateMessage::GamestateMessage(std::vector<float> buffer)
 {
     deserialize(buffer);
 }
 
 
-void Message::serialize(game_state state)
+void GamestateMessage::serialize(game_state state)
 {
+    header.size = body.size();
+    // header.id = 1;
+    body.push_back(header.size);
     body.push_back(state.planet_pos.x);
     body.push_back(state.planet_pos.y);
     body.push_back(state.player1_pos.x);
@@ -56,25 +60,72 @@ void Message::serialize(game_state state)
         body.push_back(proj.velx);
         body.push_back(proj.vely);
     }
-
     
-    
-    // size_t i = body.size();
-    // size_t pos_size = sizeof(pos);
-
-    // body.resize(body.size() + sizeof(state));
-    
-    // std::memcpy(body.data() + i, &state.planet_pos.x, sizeof(int32_t));
-    // std::memcpy(body.data() + i + sizeof(int32_t), &state.planet_pos.y, sizeof(int32_t));
-    // std::memcpy(body.data() + i + pos_size, &state.player1_pos, pos_size);
-    // std::memcpy(body.data() + i + 2*pos_size, &state.player2_pos, pos_size);
-    // std::memcpy(body.data() + i + 3*pos_size, state.projectiles.data(), state.projectiles.size());
-    header.size = body.size();
-    header.id = 1;
 }
 
 
-void Message::deserialize(std::vector<char> buffer)
+void GamestateMessage::deserialize(std::vector<float> buffer)
+{   
+    game_state state;
+    int size = static_cast<int>(buffer[0]);
+    state.planet_pos.x = buffer[1];
+    state.planet_pos.y = buffer[2];
+    state.player1_pos.x = buffer[3];
+    state.player1_pos.y = buffer[4];
+    state.player2_pos.x = buffer[5];
+    state.player2_pos.y = buffer[6];
+
+    for (int i=7; i < size; i +=4) {
+        state.projectiles.push_back(projectile_state(buffer[i], buffer[i+1], buffer[i+2], buffer[i+3]));
+    }
+    gstate = state;
+}
+
+
+game_state GamestateMessage::get_game_state()
+{
+    return gstate;
+}
+
+
+
+
+ControlMessage::ControlMessage(Move control_input)
+{
+    serialize(control_input);
+}
+
+ControlMessage::ControlMessage(std::vector<int> buffer)
+{
+    deserialize(buffer);
+}
+
+void ControlMessage::serialize(Move control_input)
 {
 
+    header.size = body.size();
+    
+    body.push_back(static_cast<int>(header.size));
+    body.push_back(static_cast<int>(control_input.left));
+    body.push_back(static_cast<int>(control_input.right));
+    body.push_back(static_cast<int>(control_input.up));
+    body.push_back(static_cast<int>(control_input.space));
+    body.push_back(static_cast<int>(control_input.a));
+}
+
+void ControlMessage::deserialize(std::vector<int> buffer)
+{
+    Move control;
+    int size = buffer[0];
+    control.left = buffer[1];
+    control.right = buffer[2];
+    control.up = buffer[3];
+    control.space = buffer[4];
+    control.a = buffer[5];
+    controls = control;
+}
+
+Move ControlMessage::get_controls()
+{
+    return controls;
 }

@@ -1,3 +1,6 @@
+#ifndef SERVER_H
+#define SERVER_H
+
 #include <asio.hpp>
 #include <iostream>
 #include <thread>
@@ -6,14 +9,17 @@
 #include <asio/ts/internet.hpp>
 #include <chrono>
 #include <thread>
+#include "threadsafe_queue.h"
+
 
 class Server
 {
+    tsQueue<ControlMessage> ts_queue;
     asio::ip::tcp::acceptor *acceptor;
     asio::ip::tcp::socket *socket;
     
     asio::error_code ec;
-    std::vector<char> buf;
+    std::vector<int> buf;
     void wait_for_connection();
 
 public:
@@ -21,6 +27,9 @@ public:
     Server();
     ~Server();
     void grab_data();
-    void send_data(std::vector<char> data);
+    void send_data(std::vector<float> data);
 
 };
+
+
+#endif

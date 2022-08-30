@@ -1,17 +1,21 @@
+#ifndef MESSAGE_H
+#define MESSAGE_H
+
 
 #include <utility>
 #include <vector>
 #include <stdint.h>
 #include <iostream>
+#include "../game.h"
 
 
 struct projectile_state
 {
-    int32_t posx;
-    int32_t posy;
-    int32_t velx;
-    int32_t vely;
-    projectile_state(int32_t px, int32_t py, int32_t vx, int32_t vy);
+    float posx;
+    float posy;
+    float velx;
+    float vely;
+    projectile_state(float px, float py, float vx, float vy);
     projectile_state();
 
 };
@@ -19,9 +23,9 @@ struct projectile_state
 
 struct pos
 {
-    int32_t x;
-    int32_t y;
-    pos(int32_t _x, int32_t _y);
+    float x;
+    float y;
+    pos(float _x, float _y);
     pos();
 };
 
@@ -37,24 +41,49 @@ struct game_state
 };
 
 
+
+
 struct message_header
 {
-    int32_t size;
+    float size;
     int id;
 };
 
 
 
-class Message
+class GamestateMessage
 {
 
     void serialize(game_state state);
-    void deserialize(std::vector<char> buffer);
+    void deserialize(std::vector<float> buffer);
+    game_state gstate;
+
 public:
-    Message(game_state state);
-    Message(std::vector<char> buffer);
+    GamestateMessage(game_state state);
+    GamestateMessage(std::vector<float> buffer);
 
     message_header header;
-    std::vector<int32_t> body;
+    std::vector<float> body;
+    game_state get_game_state();
 
 };
+
+
+
+
+class ControlMessage
+{
+    void serialize(Move control_input);
+    void deserialize(std::vector<int> buffer);
+    Move controls;
+
+public:
+    ControlMessage(Move control_input);
+    ControlMessage(std::vector<int> buffer);
+
+    message_header header;
+    std::vector<int> body;
+    Move get_controls();
+};
+
+#endif

@@ -1,4 +1,4 @@
-CC = g++ -std=c++11
+CC = g++ -std=c++17
 
 # INCLUDES = -I/usr/local/Cellar/sfml/2.5.1_1/include/
 
