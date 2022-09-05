@@ -10,15 +10,21 @@ ClientGame::ClientGame(Player *p, sf::Vector2f screen_dimensions) : Game(p, scre
 
 ClientGame::~ClientGame()
 {
+    delete context_thread;
     delete client;
+
 }
 
 
 void ClientGame::start_connection()
 {
+    std::cout << " 1 " << std::endl;
     client = new Client();
+    std::cout << " 2 " << std::endl;
     client->start_connection();
-    std::thread context_thread = std::thread([&]() { client->context.run(); });
+    std::cout << " 3 " << std::endl;
+    std::thread *context_thread = new std::thread([&]() { client->context.run(); });
+    std::cout << " 4 " << std::endl;
 }
 
 
@@ -61,24 +67,24 @@ void ClientGame::send_controls(Move move)
 void ClientGame::update()
 {
     poll_events();
-
+    std::cout << " 6 " << std::endl;
     game_state state = get_groundtruth_state();
-
+std::cout << " 7 " << std::endl;
     set_groundtruth_state(state);
-
+std::cout << " 8 " << std::endl;
     update_gravity_objects();
-
+std::cout << " 9 " << std::endl;
     update_lasers();
-
+std::cout << " 10 " << std::endl;
     Move move = check_keyboard();
-
+std::cout << " 11 " << std::endl;
     update_player(player, move);
-
+std::cout << " 12 " << std::endl;
     // update_player2(); // for now just do ground truth
 
     update_screen_pos();
-
+std::cout << " 13 " << std::endl;
     update_arrows(); 
-
+std::cout << " 14 " << std::endl;
     send_controls(move); 
 }

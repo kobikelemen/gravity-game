@@ -10,7 +10,7 @@ SERVEROBJS = main.o game.o object.o player.o planet.o gravity_objects.o laser.o 
 
 CLIENTOBJS = client_main.o game.o object.o player.o planet.o gravity_objects.o laser.o arrow.o client.o message.o server.o client_game.o
 
-all: client
+all: server client
 
 server: $(SERVEROBJS)
 	$(CC) $(SERVEROBJS) $(LDFLAGS) -lsfml-graphics -lsfml-window -lsfml-system -o server

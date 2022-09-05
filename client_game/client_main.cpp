@@ -38,7 +38,7 @@ int main()
     game.add_moon(moon1);
 
     game.start_connection();
-    
+    std::cout << " 5 " << std::endl;
     while (game.running()) 
     { 
         game.update();

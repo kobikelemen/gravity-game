@@ -20,6 +20,7 @@ Game::Game(Player *p, sf::Vector2f screen_dimensions)
 Game::~Game()
 {
     delete this->window;
+    delete context_thread;
     delete server;
 }
 
@@ -269,7 +270,9 @@ void Game::start_connection()
 {
     server = new Server();
     server->start_connection();
-    std::thread context_thread = std::thread([&]() { server->context.run(); });
+    std::cout << "HELLO" << std::endl;
+    std::thread *context_thread = new std::thread([&]() { server->context.run(); });
+    std::cout << "HELLO2" << std::endl;
 }
 
 

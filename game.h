@@ -32,6 +32,7 @@ class Game
 
 protected:
     Server *server;
+    std::thread *context_thread;
     sf::RenderWindow* window;
     sf::Event ev;
     sf::View *view;
