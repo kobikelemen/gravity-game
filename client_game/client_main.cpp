@@ -32,10 +32,12 @@ int main()
 
 
     sf::Vector2f screen_dimensions = {600.f, 600.f};
-    Game game(player, screen_dimensions);
+    ClientGame game(player, screen_dimensions);
     game.set_player2(player2);
     game.add_planet(planet1);
     game.add_moon(moon1);
+
+    game.start_connection();
     
     while (game.running()) 
     { 

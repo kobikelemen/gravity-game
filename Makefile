@@ -6,15 +6,17 @@ CFLAGS = -g
 
 LDFLAGS = -L/usr/local/Cellar/sfml/2.5.1_1/lib/
 
-SERVEROBJS = main.o game.o object.o player.o planet.o gravity_objects.o laser.o arrow.o server.o threadsafe_queue.o
+SERVEROBJS = main.o game.o object.o player.o planet.o gravity_objects.o laser.o arrow.o server.o message.o
 
-CLIENTOBJS = client_main.o game.o object.o player.o planet.o gravity_objects.o laser.o arrow.o client.o threadsafe_queue.o
+CLIENTOBJS = client_main.o game.o object.o player.o planet.o gravity_objects.o laser.o arrow.o client.o message.o server.o client_game.o
+
+all: client
 
 server: $(SERVEROBJS)
-	$(CC) $(SERVEROBJS) $(LDFLAGS) -lsfml-graphics -lsfml-window -lsfml-system -o main
+	$(CC) $(SERVEROBJS) $(LDFLAGS) -lsfml-graphics -lsfml-window -lsfml-system -o server
 
 client: $(CLIENTOBJS)
-	$(CC) $(CLIENTOBJS) $(LDFLAGS) -lsfml-graphics -lsfml-window -lsfml-system -o main
+	$(CC) $(CLIENTOBJS) $(LDFLAGS) -lsfml-graphics -lsfml-window -lsfml-system -o client
 
 
 main.o: main.cpp game.h
@@ -50,12 +52,11 @@ client.o: networking/client.cpp networking/client.h networking/message.h network
 server.o: networking/server.cpp networking/server.h networking/message.h networking/threadsafe_queue.h
 	$(CC) $(CFLAGS) -c networking/server.cpp networking/server.h networking/message.h networking/threadsafe_queue.h
 
-threadsafe_queue.o: networking/threadsafe_queue.cpp networking/threadsafe_queue.h networking/message.h
-	$(CC) $(CFLAGS) -c networking/threadsafe_queue.cpp networking/threadsafe_queue.h networking/message.h
+client_game.o: client_game/client_game.cpp client_game/client_game.h game.h networking/client.h networking/server.h
+	$(CC) $(CFLAGS) -c client_game/client_game.cpp client_game/client_game.h game.h networking/client.h networking/server.h
 
-client_game.o: client_game/client_game.cpp client_game/client_game.h game.h networking/client.h
-	$(CC) $(CFLAGS) -c client_game/client_game.cpp client_game/client_game.h game.h networking/client.h
-
+message.o: networking/message.cpp networking/message.h move.h
+	$(CC) $(CFLAGS) -c networking/message.cpp networking/message.h move.h
 
 clean:
-	rm -f $(OBJS) *~
+	rm -f $(SERVEROBJS) $(CLIENTOBJS) *~

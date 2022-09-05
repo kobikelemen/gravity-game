@@ -8,9 +8,17 @@ ClientGame::ClientGame(Player *p, sf::Vector2f screen_dimensions) : Game(p, scre
 }
 
 
+ClientGame::~ClientGame()
+{
+    delete client;
+}
+
+
 void ClientGame::start_connection()
 {
-    client.start_connection();
+    client = new Client();
+    client->start_connection();
+    std::thread context_thread = std::thread([&]() { client->context.run(); });
 }
 
 
@@ -37,8 +45,8 @@ void ClientGame::set_groundtruth_state(game_state state)
 
 game_state ClientGame::get_groundtruth_state()
 {
-    GamestateMessage msg = client.ts_queue.pop_back();
-    client.ts_queue.clear();
+    GamestateMessage msg = client->ts_queue.pop_back();
+    client->ts_queue.clear();
     game_state gstate = msg.get_game_state();
     return gstate;
 }
@@ -46,7 +54,7 @@ game_state ClientGame::get_groundtruth_state()
 
 void ClientGame::send_controls(Move move)
 {
-    client.send_data(move);
+    client->send_data(move);
 }
 
 

@@ -6,7 +6,9 @@
 #include <vector>
 #include <stdint.h>
 #include <iostream>
-#include "../game.h"
+// #include "../game.h"
+#include "../move.h"
+
 
 
 struct projectile_state
@@ -23,7 +25,7 @@ struct projectile_state
 
 struct player_state
 {
-    float x;
+    float x; 
     float y;
     player_state(float _x, float _y);
     player_state();

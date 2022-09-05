@@ -13,12 +13,14 @@ Game::Game(Player *p, sf::Vector2f screen_dimensions)
     view = new sf::View();
     screen_dim = screen_dimensions;
     enemy_planet_arrow = new Arrow(screen_dim);
+
 }
 
 
 Game::~Game()
 {
     delete this->window;
+    delete server;
 }
 
 
@@ -230,7 +232,7 @@ void Game::update_arrows()
 
 void Game::send_game_state(game_state state)
 {
-    server.send_data(state);
+    server->send_data(state);
 }
 
 
@@ -256,8 +258,8 @@ game_state Game::capture_game_state()
 
 Move Game::get_player2_control()
 {
-    ControlMessage cmsg = server.ts_queue.pop_back();
-    server.ts_queue.clear();
+    ControlMessage cmsg = server->ts_queue.pop_back();
+    server->ts_queue.clear();
     Move move = cmsg.get_controls();
     return move;
 }
@@ -265,7 +267,9 @@ Move Game::get_player2_control()
 
 void Game::start_connection()
 {
-    server.start_connection();
+    server = new Server();
+    server->start_connection();
+    std::thread context_thread = std::thread([&]() { server->context.run(); });
 }
 
 

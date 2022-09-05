@@ -42,8 +42,8 @@ void Client::grab_data()
                 // }
                 GamestateMessage msg = GamestateMessage(buf);
                 game_state gs = msg.get_game_state();
-                std::cout << "\n\ngame state:" << std::endl;
-                std::cout << gs.planet_pos.x << " " << gs.planet_pos.y << " " << gs.player1_pos.x << std::endl;
+                // std::cout << "\n\ngame state:" << std::endl;
+                // std::cout << gs.planet_pos.x << " " << gs.planet_pos.y << " " << gs.player1_pos.x << std::endl;
                 // ts_queue.push_front(msg);
                 grab_data();
             } 
@@ -62,17 +62,17 @@ void Client::send_data(Move controls)
 
 
 
-int main()
-{
-    Client client; 
-    client.start_connection();   
-    std::thread context_thread = std::thread([&]() { client.context.run(); });
-    int i=0;
-    for (;;) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-        client.send_data(std::to_string(i));
-        i++;
+// int main()
+// {
+//     Client client; 
+//     client.start_connection();   
+//     std::thread context_thread = std::thread([&]() { client.context.run(); });
+//     int i=0;
+//     for (;;) {
+//         std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+//         client.send_data(std::to_string(i));
+//         i++;
         
-    }
+//     }
 
-}
+// }

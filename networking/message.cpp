@@ -3,6 +3,19 @@
 
 
 
+player_state::player_state(float _x, float _y)
+{
+    x = _x;
+    y = _y;
+}
+
+
+player_state::player_state()
+{
+
+}
+
+
 projectile_state::projectile_state(float px, float py, float vx, float vy) 
 {
     posx = px;
@@ -12,15 +25,9 @@ projectile_state::projectile_state(float px, float py, float vx, float vy)
 }
 
 
-pos::pos(float _x, float _y) 
+projectile_state::projectile_state()
 {
-    x = _x;
-    y = _y;
-}
-
-pos::pos()
-{
-
+    
 }
 
 game_state::game_state()
@@ -47,12 +54,12 @@ void GamestateMessage::serialize(game_state state)
     header.size = body.size();
     // header.id = 1;
     body.push_back(header.size);
-    body.push_back(state.planet_pos.x);
-    body.push_back(state.planet_pos.y);
-    body.push_back(state.player1_pos.x);
-    body.push_back(state.player1_pos.y);
-    body.push_back(state.player2_pos.x);
-    body.push_back(state.player2_pos.y);
+    // body.push_back(state.planet_pos.x);
+    // body.push_back(state.planet_pos.y);
+    body.push_back(state.player1_state.x);
+    body.push_back(state.player1_state.y);
+    body.push_back(state.player2_state.x);
+    body.push_back(state.player2_state.y);
     body.push_back(state.projectiles.size());
     for (projectile_state &proj : state.projectiles) {
         body.push_back(proj.posx);
@@ -68,12 +75,12 @@ void GamestateMessage::deserialize(std::vector<float> buffer)
 {   
     game_state state;
     int size = static_cast<int>(buffer[0]);
-    state.planet_pos.x = buffer[1];
-    state.planet_pos.y = buffer[2];
-    state.player1_pos.x = buffer[3];
-    state.player1_pos.y = buffer[4];
-    state.player2_pos.x = buffer[5];
-    state.player2_pos.y = buffer[6];
+    // state.planet_pos.x = buffer[1];
+    // state.planet_pos.y = buffer[2];
+    state.player1_state.x = buffer[1];
+    state.player1_state.y = buffer[2];
+    state.player2_state.x = buffer[3];
+    state.player2_state.y = buffer[4];
 
     for (int i=7; i < size; i +=4) {
         state.projectiles.push_back(projectile_state(buffer[i], buffer[i+1], buffer[i+2], buffer[i+3]));

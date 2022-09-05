@@ -52,7 +52,9 @@ int main()
     game.add_moon(moon1);
     // game.add_moon(moon2);
     
-    while (game.running()) 
+    game.start_connection();
+
+    while (game.running())
     { 
         game.update();
         game.render();

@@ -1,36 +1,14 @@
-#include <SFML/Graphics.hpp>
+#include "networking/threadsafe_queue.h"
+#include "networking/message.h"
 
 int main()
 {
-    // create the window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
-
-    // run the program as long as the window is open
-    while (window.isOpen())
-    {
-        // check all the window's events that were triggered since the last iteration of the loop
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        // clear the window with black color
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-            // move.right = true;
-            printf("\nyo3");
-        }
-        printf("\n%i ", sf::Keyboard::KeyCount);
-        window.clear(sf::Color::Black);
-
-        // draw everything here...
-        // window.draw(...);
-
-        // end the current frame
-        window.display();
-    }
-
-    return 0;
+    tsQueue<GamestateMessage> q;
+    game_state state;
+    state.player1_state = player_state(1.f,1.f);
+    state.player2_state = player_state(2.f,2.f);
+    state.projectiles.push_back(projectile_state(5.f,5.f,6.f,6.f));
+    GamestateMessage msg(state);
+    q.push_back(msg);
+    
 }

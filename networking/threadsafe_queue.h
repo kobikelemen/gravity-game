@@ -30,7 +30,7 @@ public:
 
 };
 
-#endif
+
 
 
 
@@ -84,3 +84,5 @@ void tsQueue<T>::clear()
     std::scoped_lock lock(queue_mutex);
     queue.clear();
 }
+
+#endif
