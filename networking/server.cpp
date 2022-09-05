@@ -31,7 +31,7 @@ void Server::grab_data()
 {
     socket->async_read_some(asio::buffer(buf.data(), buf.size()),
         [this](std::error_code ec, std::size_t length)
-        {
+        { 
             if (!ec) {
                 std::cout << "Recieved" << std::endl;
                 for (int i=0; i < length; i ++) {

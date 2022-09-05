@@ -286,7 +286,6 @@ void Game::update()
     
     Move move1 = check_keyboard();
 
-    Move move2 = get_player2_control();
 
     // update_player1(move1);
 
@@ -294,7 +293,13 @@ void Game::update()
 
     update_player(player, move1);
 
-    update_player(player2, move2);
+
+    if (server->ts_queue.size() > 0) {
+        Move move2 = get_player2_control();
+        update_player(player2, move2);
+    }
+
+    
 
     check_collisions();
 

@@ -55,6 +55,7 @@ void Client::grab_data()
 void Client::send_data(Move controls)
 {
     std::cout << "data sent" << std::endl;
+    std::cout << "controls: " << controls.left << " " << controls.right << " " << controls.up << " " << controls.space << " " << std::endl;
     // Move c(true,false,true,true,false);
     ControlMessage cmsg(controls);
     asio::write(*socket, asio::buffer(cmsg.body));

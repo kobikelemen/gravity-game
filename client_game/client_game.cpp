@@ -51,6 +51,7 @@ void ClientGame::set_groundtruth_state(game_state state)
 
 game_state ClientGame::get_groundtruth_state()
 {
+    // std::cout << "tsque size " << client->ts_queue.size() << std::endl;
     GamestateMessage msg = client->ts_queue.pop_back();
     client->ts_queue.clear();
     game_state gstate = msg.get_game_state();
@@ -68,23 +69,27 @@ void ClientGame::update()
 {
     poll_events();
     std::cout << " 6 " << std::endl;
-    game_state state = get_groundtruth_state();
-std::cout << " 7 " << std::endl;
-    set_groundtruth_state(state);
-std::cout << " 8 " << std::endl;
+    if (client->ts_queue.size() > 0) {
+        game_state state = get_groundtruth_state();
+        std::cout << " 7 " << std::endl;
+        set_groundtruth_state(state);
+    }
+    
+
+    std::cout << " 8 " << std::endl;
     update_gravity_objects();
-std::cout << " 9 " << std::endl;
+    std::cout << " 9 " << std::endl;
     update_lasers();
-std::cout << " 10 " << std::endl;
+    std::cout << " 10 " << std::endl;
     Move move = check_keyboard();
-std::cout << " 11 " << std::endl;
+    std::cout << " 11 " << std::endl;
     update_player(player, move);
-std::cout << " 12 " << std::endl;
+    std::cout << " 12 " << std::endl;
     // update_player2(); // for now just do ground truth
 
     update_screen_pos();
-std::cout << " 13 " << std::endl;
+    std::cout << " 13 " << std::endl;
     update_arrows(); 
-std::cout << " 14 " << std::endl;
+    std::cout << " 14 " << std::endl;
     send_controls(move); 
 }
