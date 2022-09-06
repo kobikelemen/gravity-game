@@ -31,15 +31,10 @@ void Client::start_connection()
 
 void Client::grab_data()
 {
-
     socket->async_read_some(asio::buffer(buf.data(), buf.size()),
         [this](std::error_code ec, std::size_t length) 
         {
             if (!ec) {
-                // std::cout << "Recieved" << std::endl;
-                // for (int i=0; i < length; i++) {
-                //     std::cout << buf[i];
-                // }
                 GamestateMessage msg = GamestateMessage(buf);
                 game_state gs = msg.get_game_state();
                 // std::cout << "\n\nrecieved game state:" << std::endl;

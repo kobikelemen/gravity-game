@@ -158,6 +158,7 @@ Player::Player(float x, float y, float rotate_speed) : Rocket(x,y, rotate_speed)
 {
     space_released = true;
     a_released = true;
+    num_proj_launched = 0;
 }
 
 Player::~Player()
@@ -189,6 +190,7 @@ launched Player::update_pos(bool forward_arr, bool left_arr, bool right_arr, boo
     // std::pair<*Projectile, *Laser> launched = {NULL, NULL};
     launched launch;
     if (space_released && space) {
+        num_proj_launched ++;
         space_released = false;
         float power_const = -300;
         Projectile *p = launch_projectile(xi, yi, power_const);
@@ -214,4 +216,9 @@ void Player::set_space_released(bool s)
 void Player::set_a_released(bool s)
 {
     a_released = s;
+}
+
+bool Player::get_space_released()
+{
+    return space_released;
 }

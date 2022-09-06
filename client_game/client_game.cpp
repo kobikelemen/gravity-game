@@ -46,10 +46,12 @@ void ClientGame::set_groundtruth_state(game_state state)
     player2->set_shape_pos(state.player1_state.x, state.player1_state.y);
     player2->set_shape_angle(state.player1_state.angle);
 
-    clear_projectiles();
+    // clear_projectiles();
     for (projectile_state sproj : state.projectiles) {
         Projectile *proj = new Projectile(sproj.posx, sproj.posy, sproj.velx, sproj.vely, 5.f);
         projectiles.push_back(proj);
+        // sproj->set_position();
+        // proj->set_posx()
     }
 }
 
@@ -60,12 +62,12 @@ game_state ClientGame::get_groundtruth_state()
     GamestateMessage msg = client->ts_queue.pop_back();
     client->ts_queue.clear();
     game_state gstate = msg.get_game_state();
-    std::cout << "\n\nrecieved game state:" << std::endl;
-    std::cout << "p1 " <<gstate.player1_state.x << " " << gstate.player1_state.y << "  p2 " << gstate.player2_state.x << " " << gstate.player2_state.y;
-    std::cout << " projectiles ";
-    for (auto p : gstate.projectiles) {
-        std::cout << p.posx << ", " << p.posy << "   ";
-    }
+    // std::cout << "\n\nrecieved game state:" << std::endl;
+    // std::cout << "p1 " <<gstate.player1_state.x << " " << gstate.player1_state.y << "  p2 " << gstate.player2_state.x << " " << gstate.player2_state.y;
+    // std::cout << " projectiles ";
+    // for (auto p : gstate.projectiles) {
+    //     std::cout << p.posx << "," << p.posy << "   ";
+    // }
     std::cout << std::endl;
 
     return gstate;

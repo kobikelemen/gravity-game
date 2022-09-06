@@ -242,7 +242,7 @@ void Game::send_game_state(game_state state)
 }
 
 
-game_state Game::capture_game_state()
+game_state Game::capture_game_state(Move move)
 {
     game_state state;
     state.player1_state.x = player->get_posx();
@@ -252,14 +252,27 @@ game_state Game::capture_game_state()
     state.player2_state.x = player2->get_posx();
     state.player2_state.y = player2->get_posy();
     state.player2_state.angle = player2->get_angle();
-    for (Projectile *proj : projectiles) {
+
+    if (move.space && player->num_proj_launched > 0 && projectiles.size() > 0) {
+        player->num_proj_launched --;
         projectile_state proj_state;
-        proj_state.posx = proj->get_centrex();
-        proj_state.posy = proj->get_centrey();
-        proj_state.velx = proj->get_velx();
-        proj_state.vely = proj->get_vely();
+        proj_state.posx = projectiles.back()->get_centrex();
+        proj_state.posy = projectiles.back()->get_centrey();
+        proj_state.velx = projectiles.back()->get_velx();
+        proj_state.vely = projectiles.back()->get_vely();
         state.projectiles.push_back(proj_state);
+        std::cout << "proj pos " << proj_state.posx << " " << proj_state.posy << std::endl << std::endl;
     }
+
+    
+    // for (Projectile *proj : projectiles) {
+    //     projectile_state proj_state;
+        // proj_state.posx = proj->get_centrex();
+        // proj_state.posy = proj->get_centrey();
+        // proj_state.velx = proj->get_velx();
+        // proj_state.vely = proj->get_vely();
+        // state.projectiles.push_back(proj_state);
+    // }
     return state;
 
 }
@@ -278,9 +291,7 @@ void Game::start_connection()
 {
     server = new Server();
     server->start_connection();
-    std::cout << "HELLO" << std::endl;
     std::thread *context_thread = new std::thread([&]() { server->context.run(); });
-    std::cout << "HELLO2" << std::endl;
 }
 
 
@@ -293,11 +304,6 @@ void Game::update()
     update_lasers();
     
     Move move1 = check_keyboard();
-
-
-    // update_player1(move1);
-
-    // update_player2(move2);
 
     update_player(player, move1);
 
@@ -312,7 +318,7 @@ void Game::update()
 
     update_arrows();
 
-    game_state gstate = capture_game_state();
+    game_state gstate = capture_game_state(move1);
 
     send_game_state(gstate);
 

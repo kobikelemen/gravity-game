@@ -65,7 +65,7 @@ protected:
     void send_game_state(game_state state);
     Move check_keyboard();
     Move get_player2_control();
-    game_state capture_game_state();
+    game_state capture_game_state(Move move);
 
 public:
 
