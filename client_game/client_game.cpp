@@ -103,5 +103,8 @@ void ClientGame::update()
 
     update_arrows(); 
 
+    if (move.space) {
+        std::cout << "move.space true" << std::endl;
+    }
     send_controls(move); 
 }

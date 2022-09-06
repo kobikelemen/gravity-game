@@ -170,6 +170,7 @@ void Game::update_player(Player *p, Move move)
     launched launch = p->update_pos(move.up, move.left, move.right, move.space, move.a, gravity_force);
 
     if (launch.p) {
+        std::cout << " projectile shot" << std::endl;
         projectiles.push_back(launch.p);
     }
     if (launch.l) {
@@ -310,6 +311,9 @@ void Game::update()
     if (server->ts_queue.size() > 0) {
         Move move2 = get_player2_control();
         update_player(player2, move2);
+        if (!move2.space) {
+            player2->set_space_released(true);
+        }
     }
 
     check_collisions();
