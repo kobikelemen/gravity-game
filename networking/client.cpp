@@ -36,15 +36,15 @@ void Client::grab_data()
         [this](std::error_code ec, std::size_t length) 
         {
             if (!ec) {
-                std::cout << "Recieved" << std::endl;
+                // std::cout << "Recieved" << std::endl;
                 // for (int i=0; i < length; i++) {
                 //     std::cout << buf[i];
                 // }
                 GamestateMessage msg = GamestateMessage(buf);
                 game_state gs = msg.get_game_state();
-                // std::cout << "\n\ngame state:" << std::endl;
-                // std::cout << gs.planet_pos.x << " " << gs.planet_pos.y << " " << gs.player1_pos.x << std::endl;
-                // ts_queue.push_front(msg);
+                // std::cout << "\n\nrecieved game state:" << std::endl;
+                // std::cout << "p1 " <<gs.player1_state.x << " " << gs.player1_state.y << "  p2 " << gs.player2_state.x << " " << gs.player2_state.y << std::endl;
+                ts_queue.push_front(msg);
                 grab_data();
             } 
         }
@@ -54,8 +54,7 @@ void Client::grab_data()
 
 void Client::send_data(Move controls)
 {
-    std::cout << "data sent" << std::endl;
-    std::cout << "controls: " << controls.left << " " << controls.right << " " << controls.up << " " << controls.space << " " << std::endl;
+    // std::cout << "sending controls: " << controls.left << " " << controls.right << " " << controls.up << " " << controls.space << " " << std::endl;
     // Move c(true,false,true,true,false);
     ControlMessage cmsg(controls);
     asio::write(*socket, asio::buffer(cmsg.body));

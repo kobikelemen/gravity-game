@@ -33,10 +33,13 @@ void Server::grab_data()
         [this](std::error_code ec, std::size_t length)
         { 
             if (!ec) {
-                std::cout << "Recieved" << std::endl;
-                for (int i=0; i < length; i ++) {
-                    std::cout << buf[i] << " " << std::endl;
-                }
+                // std::cout << "Recieved controls:" << std::endl;
+                // for (int i=0; i < length; i ++) {
+                //     std::cout << buf[i] << " " << std::endl;
+                // }
+                ControlMessage cmsg = ControlMessage(buf);
+                ts_queue.push_front(cmsg);
+
 
                 // send_data(std::vector<float>(1.f));
             } else {
@@ -58,7 +61,7 @@ void Server::send_data(game_state state)
     // state.projectiles.push_back(projectile_state(4.f,4.f,4.f,4.f));
 
     GamestateMessage msg(state);
-    std::cout << "msg body: ";
+    std::cout << "\nmsg body: ";
     for (int i=0; i < msg.body.size(); i ++) {
         std::cout << msg.body[i] << " ";
     }

@@ -32,13 +32,12 @@ int main()
 
 
     sf::Vector2f screen_dimensions = {600.f, 600.f};
-    ClientGame game(player, screen_dimensions);
+    ClientGame game(player, screen_dimensions, std::string("Gravity Client"));
     game.set_player2(player2);
     game.add_planet(planet1);
     game.add_moon(moon1);
-
     game.start_connection();
-    std::cout << " 5 " << std::endl;
+    
     while (game.running()) 
     { 
         game.update();

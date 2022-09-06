@@ -21,14 +21,14 @@ int main()
 
 
     float rotate_speed = 180.f; // degs/sec
-    float player_x = 500.f;
-    float player_y = 400.f;
+    float player_x = 100.f;
+    float player_y = 100.f;
     Player *player = new Player(player_x, player_y, rotate_speed);
 
 
     float rotate_speed2 = 180.f; // degs/sec
-    float player_x2 = 100.f;
-    float player_y2 = 100.f;
+    float player_x2 = 500.f;
+    float player_y2 = 400.f;
     Player * player2 = new Player(player_x2, player_y2, rotate_speed2);
 
     float moon_vx = 215.f;
@@ -45,7 +45,7 @@ int main()
 
 
     sf::Vector2f screen_dimensions = {600.f, 600.f};
-    Game game(player, screen_dimensions);
+    Game game(player, screen_dimensions, std::string("Game Server"));
     game.set_player2(player2);
     // game.add_planet(planet2);
     game.add_planet(planet1);

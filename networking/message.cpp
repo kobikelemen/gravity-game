@@ -27,7 +27,7 @@ projectile_state::projectile_state(float px, float py, float vx, float vy)
 
 projectile_state::projectile_state()
 {
-    
+
 }
 
 game_state::game_state()
@@ -118,6 +118,7 @@ void ControlMessage::serialize(Move control_input)
     body.push_back(static_cast<int>(control_input.up));
     body.push_back(static_cast<int>(control_input.space));
     body.push_back(static_cast<int>(control_input.a));
+    body.push_back(-1);
 }
 
 void ControlMessage::deserialize(std::vector<int> buffer)

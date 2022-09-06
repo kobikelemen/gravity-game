@@ -19,7 +19,7 @@ public:
 
     void update();
     void start_connection();
-    ClientGame(Player *p, sf::Vector2f screen_dimensions);
+    ClientGame(Player *p, sf::Vector2f screen_dimensions, std::string win_name);
     ~ClientGame();
 };
 

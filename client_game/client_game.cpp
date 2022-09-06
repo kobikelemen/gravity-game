@@ -2,7 +2,7 @@
 
 
 
-ClientGame::ClientGame(Player *p, sf::Vector2f screen_dimensions) : Game(p, screen_dimensions)
+ClientGame::ClientGame(Player *p, sf::Vector2f screen_dimensions, std::string win_name) : Game(p, screen_dimensions, win_name)
 {
 
 }
@@ -38,8 +38,11 @@ void ClientGame::set_groundtruth_state(game_state state)
 {
     player->set_posx(state.player2_state.x); // set as player2 because for server it's other way around
     player->set_posy(state.player2_state.y);
+    player->set_shape_pos(state.player2_state.x, state.player2_state.y);
+
     player2->set_posx(state.player1_state.x);
-    player2->set_posy(state.player2_state.y);
+    player2->set_posy(state.player1_state.y);
+    player2->set_shape_pos(state.player1_state.x, state.player1_state.y);
 
     clear_projectiles();
     for (projectile_state sproj : state.projectiles) {
@@ -55,6 +58,8 @@ game_state ClientGame::get_groundtruth_state()
     GamestateMessage msg = client->ts_queue.pop_back();
     client->ts_queue.clear();
     game_state gstate = msg.get_game_state();
+    std::cout << "\n\nrecieved game state:" << std::endl;
+    std::cout << "p1 " <<gstate.player1_state.x << " " << gstate.player1_state.y << "  p2 " << gstate.player2_state.x << " " << gstate.player2_state.y << std::endl;
     return gstate;
 }
 
@@ -68,28 +73,25 @@ void ClientGame::send_controls(Move move)
 void ClientGame::update()
 {
     poll_events();
-    std::cout << " 6 " << std::endl;
+
     if (client->ts_queue.size() > 0) {
         game_state state = get_groundtruth_state();
-        std::cout << " 7 " << std::endl;
         set_groundtruth_state(state);
     }
-    
 
-    std::cout << " 8 " << std::endl;
     update_gravity_objects();
-    std::cout << " 9 " << std::endl;
+
     update_lasers();
-    std::cout << " 10 " << std::endl;
+
     Move move = check_keyboard();
-    std::cout << " 11 " << std::endl;
-    update_player(player, move);
-    std::cout << " 12 " << std::endl;
+
+    // update_player(player, move);
+
     // update_player2(); // for now just do ground truth
 
     update_screen_pos();
-    std::cout << " 13 " << std::endl;
+
     update_arrows(); 
-    std::cout << " 14 " << std::endl;
+
     send_controls(move); 
 }

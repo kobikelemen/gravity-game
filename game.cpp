@@ -1,8 +1,8 @@
 #include "game.h"
 
-Game::Game(Player *p, sf::Vector2f screen_dimensions)
+Game::Game(Player *p, sf::Vector2f screen_dimensions ,std::string window_name)
 {
-    this->window = new sf::RenderWindow(sf::VideoMode(screen_dimensions.x, screen_dimensions.y), "Gravity");
+    this->window = new sf::RenderWindow(sf::VideoMode(screen_dimensions.x, screen_dimensions.y), window_name);
     this->window->setFramerateLimit(60);
     player = p;
     projectiles = {};
@@ -13,6 +13,7 @@ Game::Game(Player *p, sf::Vector2f screen_dimensions)
     view = new sf::View();
     screen_dim = screen_dimensions;
     enemy_planet_arrow = new Arrow(screen_dim);
+    focus = true;
 
 }
 
@@ -134,6 +135,7 @@ void Game::check_collisions()
 Move Game::check_keyboard()
 {
     Move move;
+    if (focus) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
         move.left = true;
     }
@@ -149,6 +151,9 @@ Move Game::check_keyboard()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         move.a = true;
     }
+    }
+
+    
     return move;
 }
 
@@ -316,6 +321,9 @@ void Game::update()
 void Game::poll_events()
 {
     while (this->window->pollEvent(this->ev)) {
+        if(ev.type == sf::Event::GainedFocus) focus = true;
+        if(ev.type == sf::Event::LostFocus) focus = false;
+
         if (ev.type == sf::Event::Closed) 
             this->window->close(); 
         

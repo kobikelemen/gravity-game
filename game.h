@@ -49,6 +49,7 @@ protected:
     sf::Vector2f mousepos;
     sf::Vector2f screen_dim;
     sf::Vector2f screen_pos;
+    bool focus;
     bool button_released;
     void poll_events();
     void check_click();
@@ -68,7 +69,7 @@ protected:
 
 public:
 
-    Game(Player *p, sf::Vector2f screen_dimensions);
+    Game(Player *p, sf::Vector2f screen_dimensions, std::string window_name);
     ~Game();
 
     virtual void update();

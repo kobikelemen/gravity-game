@@ -143,6 +143,10 @@ void Rocket::set_alive(float a)
     alive = a;
 }
 
+void Rocket::set_shape_pos(float x, float y)
+{
+    shape->setPosition(x,y);
+}
 
 
 
