@@ -27,7 +27,8 @@ struct player_state
 {
     float x; 
     float y;
-    player_state(float _x, float _y);
+    float angle;
+    player_state(float _x, float _y, float ang);
     player_state();
 };
 

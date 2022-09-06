@@ -39,10 +39,12 @@ void ClientGame::set_groundtruth_state(game_state state)
     player->set_posx(state.player2_state.x); // set as player2 because for server it's other way around
     player->set_posy(state.player2_state.y);
     player->set_shape_pos(state.player2_state.x, state.player2_state.y);
+    player->set_shape_angle(state.player2_state.angle);
 
     player2->set_posx(state.player1_state.x);
     player2->set_posy(state.player1_state.y);
     player2->set_shape_pos(state.player1_state.x, state.player1_state.y);
+    player2->set_shape_angle(state.player1_state.angle);
 
     clear_projectiles();
     for (projectile_state sproj : state.projectiles) {
@@ -59,7 +61,13 @@ game_state ClientGame::get_groundtruth_state()
     client->ts_queue.clear();
     game_state gstate = msg.get_game_state();
     std::cout << "\n\nrecieved game state:" << std::endl;
-    std::cout << "p1 " <<gstate.player1_state.x << " " << gstate.player1_state.y << "  p2 " << gstate.player2_state.x << " " << gstate.player2_state.y << std::endl;
+    std::cout << "p1 " <<gstate.player1_state.x << " " << gstate.player1_state.y << "  p2 " << gstate.player2_state.x << " " << gstate.player2_state.y;
+    std::cout << " projectiles ";
+    for (auto p : gstate.projectiles) {
+        std::cout << p.posx << ", " << p.posy << "   ";
+    }
+    std::cout << std::endl;
+
     return gstate;
 }
 
@@ -85,7 +93,7 @@ void ClientGame::update()
 
     Move move = check_keyboard();
 
-    // update_player(player, move);
+    update_player(player, move);
 
     // update_player2(); // for now just do ground truth
 

@@ -148,6 +148,10 @@ void Rocket::set_shape_pos(float x, float y)
     shape->setPosition(x,y);
 }
 
+void Rocket::set_shape_angle(float angle)
+{
+    shape->setRotation(angle);
+}
 
 
 Player::Player(float x, float y, float rotate_speed) : Rocket(x,y, rotate_speed)
@@ -176,7 +180,6 @@ launched Player::update_pos(bool forward_arr, bool left_arr, bool right_arr, boo
     if (right_arr) {
         rotate = 1;
     }
-
 
     move(thrust, gravity_force, rotate);
 

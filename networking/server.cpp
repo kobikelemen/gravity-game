@@ -61,10 +61,11 @@ void Server::send_data(game_state state)
     // state.projectiles.push_back(projectile_state(4.f,4.f,4.f,4.f));
 
     GamestateMessage msg(state);
-    std::cout << "\nmsg body: ";
-    for (int i=0; i < msg.body.size(); i ++) {
-        std::cout << msg.body[i] << " ";
-    }
+    // std::cout << "\nmsg body: ";
+    // for (int i=0; i < msg.body.size(); i ++) {
+    //     std::cout << msg.body[i] << " ";
+    // }
+    
     asio::write(*socket, asio::buffer(msg.body));
 }
 

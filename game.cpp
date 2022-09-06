@@ -247,8 +247,11 @@ game_state Game::capture_game_state()
     game_state state;
     state.player1_state.x = player->get_posx();
     state.player1_state.y = player->get_posy();
+    state.player1_state.angle = player->get_angle();
+
     state.player2_state.x = player2->get_posx();
     state.player2_state.y = player2->get_posy();
+    state.player2_state.angle = player2->get_angle();
     for (Projectile *proj : projectiles) {
         projectile_state proj_state;
         proj_state.posx = proj->get_centrex();
@@ -298,13 +301,10 @@ void Game::update()
 
     update_player(player, move1);
 
-
     if (server->ts_queue.size() > 0) {
         Move move2 = get_player2_control();
         update_player(player2, move2);
     }
-
-    
 
     check_collisions();
 

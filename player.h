@@ -42,6 +42,7 @@ public:
     bool is_alive();
     void set_alive(float a);
     void set_shape_pos(float x, float y);
+    void set_shape_angle(float angle);
 
 };
 

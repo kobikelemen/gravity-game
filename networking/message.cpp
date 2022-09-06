@@ -3,10 +3,11 @@
 
 
 
-player_state::player_state(float _x, float _y)
+player_state::player_state(float _x, float _y, float ang)
 {
     x = _x;
     y = _y;
+    angle = ang;
 }
 
 
@@ -51,15 +52,17 @@ GamestateMessage::GamestateMessage(std::vector<float> buffer)
 
 void GamestateMessage::serialize(game_state state)
 {
-    header.size = body.size();
+    
     // header.id = 1;
     body.push_back(header.size);
-    // body.push_back(state.planet_pos.x);
-    // body.push_back(state.planet_pos.y);
     body.push_back(state.player1_state.x);
     body.push_back(state.player1_state.y);
+    body.push_back(state.player1_state.angle);
+
     body.push_back(state.player2_state.x);
     body.push_back(state.player2_state.y);
+    body.push_back(state.player2_state.angle);
+
     body.push_back(state.projectiles.size());
     for (projectile_state &proj : state.projectiles) {
         body.push_back(proj.posx);
@@ -67,22 +70,28 @@ void GamestateMessage::serialize(game_state state)
         body.push_back(proj.velx);
         body.push_back(proj.vely);
     }
-    
+    header.size = body.size();
+    body.insert(body.begin(), header.size);
+    std::cout << "size " << header.size << std::endl;
 }
 
 
 void GamestateMessage::deserialize(std::vector<float> buffer)
 {   
     game_state state;
-    int size = static_cast<int>(buffer[0]);
+    // int size = static_cast<int>(buffer[1]);
+    int size = (int)buffer[0];
     // state.planet_pos.x = buffer[1];
     // state.planet_pos.y = buffer[2];
-    state.player1_state.x = buffer[1];
-    state.player1_state.y = buffer[2];
-    state.player2_state.x = buffer[3];
-    state.player2_state.y = buffer[4];
-
-    for (int i=7; i < size; i +=4) {
+    state.player1_state.x = buffer[2];
+    state.player1_state.y = buffer[3];
+    state.player1_state.angle = buffer[4];
+    state.player2_state.x = buffer[5];
+    state.player2_state.y = buffer[6];
+    state.player2_state.angle = buffer[7];
+    std::cout << " size " << size << std::endl;
+    for (int i=8; i < size; i +=4) {
+        
         state.projectiles.push_back(projectile_state(buffer[i], buffer[i+1], buffer[i+2], buffer[i+3]));
     }
     gstate = state;
