@@ -12,20 +12,10 @@
 #include "arrow.h"
 #include "networking/server.h"
 #include "move.h"
-// struct Move
-// {
-//     bool left;
-//     bool right;
-//     bool up;
-//     bool space;
-//     bool a;
-//     Move(bool l, bool r, bool u, bool s, bool a_) : left{l}, right{r}, up{u}, space{s} , a{a_}{};
-//     Move() : left{false}, right{false}, up{false}, space{false}, a{false} {};
-// };
+#include "animation.h"
 
 
-// class Server;
-// struct game_state;
+
 
 class Game
 {
@@ -45,6 +35,7 @@ protected:
     Player *player;
     Player *player2;
     Arrow *enemy_planet_arrow;
+    Animation *flame;
     sf::Clock p2_deadtimer;
     sf::Vector2f mousepos;
     sf::Vector2f screen_dim;

@@ -14,6 +14,7 @@ Game::Game(Player *p, sf::Vector2f screen_dimensions ,std::string window_name)
     screen_dim = screen_dimensions;
     enemy_planet_arrow = new Arrow(screen_dim);
     focus = true;
+    flame = new Animation("flame_sprite.jpg", 612, 449, 5, 1);
 
 }
 
@@ -30,7 +31,6 @@ void Game::render()
 {
     window->clear(sf::Color(10, 0, 0 ,255));
     window->setView(*view);
-
     window->draw(*stars_sprite);
 
     for (Projectile *proj : projectiles) {
@@ -42,6 +42,7 @@ void Game::render()
     }
 
     for (Moon *moon : moons) {
+        printf("\n moon pos %f %f", moon->get_centrex(), moon->get_centrey());
         moon->render(window);
     }
 
@@ -57,6 +58,8 @@ void Game::render()
     if (abs(planets[0]->get_centrex() - player->get_posx()) > screen_dim.x/2 || abs(planets[0]->get_centrey() - player->get_posy()) > screen_dim.y/2) {
         enemy_planet_arrow->render(window);
     }
+
+    // flame->render(window);
     window->display();
 }
 
@@ -72,14 +75,17 @@ void Game::update_gravity_objects()
             proj_forces.push_back(planet->gravity(proj->get_mass(), proj->get_posx(), proj->get_posy()));
         }
         proj->update_pos(proj_forces);
-        
     }
 
     for (Moon *moon : moons) {
         for (Planet *planet : planets) {
             moon_forces.push_back(planet->gravity(moon->get_mass(), moon->get_posx(), moon->get_posy()));
+            printf("\n moon mass x y %f %f %f", moon->get_mass(), moon->get_posx(), moon->get_posy());
         }
+        printf("\nmoon forces %f %f", moon_forces.front().first, moon_forces.front().second);
+        printf("\nmoon pos before %f %f", moon->get_centrex(), moon->get_centrey());
         moon->update_pos(moon_forces);
+        printf("\nmoon pos after %f %f", moon->get_centrex(), moon->get_centrey());
     }
 }
 
@@ -181,9 +187,6 @@ void Game::update_player(Player *p, Move move)
 
 void Game::update_player2(Move move)
 {
-
-
-
     if (player2->is_alive()) {
         std::vector<std::pair<float,float>> proj_positions;
         for (Projectile *proj : projectiles) {
@@ -262,20 +265,9 @@ game_state Game::capture_game_state(Move move)
         proj_state.velx = projectiles.back()->get_velx();
         proj_state.vely = projectiles.back()->get_vely();
         state.projectiles.push_back(proj_state);
-        std::cout << "proj pos " << proj_state.posx << " " << proj_state.posy << std::endl << std::endl;
     }
 
-    
-    // for (Projectile *proj : projectiles) {
-    //     projectile_state proj_state;
-        // proj_state.posx = proj->get_centrex();
-        // proj_state.posy = proj->get_centrey();
-        // proj_state.velx = proj->get_velx();
-        // proj_state.vely = proj->get_vely();
-        // state.projectiles.push_back(proj_state);
-    // }
     return state;
-
 }
 
 
@@ -326,6 +318,8 @@ void Game::update()
 
     send_game_state(gstate);
 
+    flame->update();
+
 }
 
 void Game::poll_events()
@@ -347,7 +341,6 @@ void Game::poll_events()
             if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
                 player->set_a_released(true);
             }
-            
         }
     }
 }

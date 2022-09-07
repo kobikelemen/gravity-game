@@ -12,19 +12,10 @@ int main()
     float planet_mass = 10000000000000000.f;
     Planet *planet1 = new Planet(planet_x, planet_y, planet_radius, planet_mass);
 
-    
-    // float planet2_x = 500.f;
-    // float planet2_y = 500.f;
-    // float planet2_radius = 100.f;
-    // float planet2_mass = 10000000000000000.f;
-    // Planet *planet2 = new Planet(planet2_x, planet2_y, planet2_radius, planet2_mass);
-
-
     float rotate_speed = 180.f; // degs/sec
     float player_x = 100.f;
     float player_y = 100.f;
     Player *player = new Player(player_x, player_y, rotate_speed);
-
 
     float rotate_speed2 = 180.f; // degs/sec
     float player_x2 = 500.f;
@@ -37,23 +28,15 @@ int main()
     float moon_mass = 1000000000000.f;
     Moon * moon1 = new Moon(moon_vx, moon_vy, moon_radius, moon_mass, planet1);
 
-    // float moon2_vx = 215.f;
-    // float moon2_vy = 0;
-    // float moon2_radius = 30.f;
-    // float moon2_mass = 1000000000000.f;
-    // Moon * moon2 = new Moon(moon2_vx, moon2_vy, moon2_radius, moon2_mass, planet2);
-
 
     sf::Vector2f screen_dimensions = {600.f, 600.f};
     Game game(player, screen_dimensions, std::string("Game Server"));
     game.set_player2(player2);
     // game.add_planet(planet2);
     game.add_planet(planet1);
-    game.add_moon(moon1);
-    // game.add_moon(moon2);
-    
+    game.add_moon(moon1);    
     game.start_connection();
-    std::cout << "HELLO3" << std::endl;
+
     while (game.running())
     { 
         game.update();

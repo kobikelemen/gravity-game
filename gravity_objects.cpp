@@ -70,14 +70,19 @@ void GravityObject::update_pos(std::vector<std::pair<float,float>> forces)
         dt = 1/30;
         first = false;
     } else {
-        dt = clock.getElapsedTime().asSeconds();
+        // dt = clock.getElapsedTime().asSeconds();
+        // dt = 1/60;
+        dt = 0.017f;
         clock.restart();
     }
     
     velx += accelx * dt;
     vely += accely * dt;
+    // printf("\n in update pos velx vely %f %f", velx, vely);
+    // printf("\n dt %f", dt);
     posx += velx * dt;
     posy += vely * dt;
+    // printf("\n in update pos posx posy %f %f", posx, posy);
     set_position(posx, posy);
 
 }
