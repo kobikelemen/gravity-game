@@ -15,7 +15,7 @@ Client::~Client()
 void Client::start_connection()
 {
     buf = std::vector<float>(1024 * 10);
-    std::string ip_address = "192.168.0.91";
+    std::string ip_address = "1234.1234.123";
     endpoint = new asio::ip::tcp::endpoint(asio::ip::make_address(ip_address,ec),1234);
     socket = new asio::ip::tcp::socket(context);
     socket->connect(*endpoint, ec);
